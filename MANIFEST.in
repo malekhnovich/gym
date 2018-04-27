@@ -1,0 +1,3 @@
+graft gym/templates
+graft gym/static
+include gym/schema.sql
