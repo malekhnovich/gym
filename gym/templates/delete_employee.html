@@ -2,9 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Deletion</title>
 </head>
 <body>
-$END$
+    {#  {% if session.logged_in %}#}
+{#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
+<form action="" method = "post">
+    <p>
+        {{ form.name.label }}<br>
+            {{ form.name(size=32) }}
+        </p>
+    </p>
+    <p>{{ form.submit()}}</p>
+       </form>
 </body>
 </html>
+
+
+    {#    <dl>#}
+{#        <dt>Title:#}
+{#        <dd><input type=text size=30 name=title>#}
+{#        <dt>Text:#}
+{#        <dd><textarea name=text rows=5 cols=40></textarea>#}
+{#        <dd><input type=submit value=Share>#}
+{#      </dl>#}
+{#    </form>#}
+{#  {% endif %}#}
+{#          <input type = "text" name = "name" id="name" label for="Full Name" >#}
+{#        <input type = "text" name = "job_status" id="job_status" label for="Job Type" >#}
+{#
+   <input type = "radio" id="fulltime" name="fulltime" value="fulltime">#}
+{#                   <label for="fulltime">Full Time</label>#}
+{#        <input type = "radio" id="external"#}
+{#               name="external" value="external">#}
+{#        <label for = "external">external</label>#}

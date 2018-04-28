@@ -1,0 +1,12 @@
+MANIFEST.in
+gym/__init__.py
+gym/gym.py
+gym/schema.sql
+gym.egg-info/PKG-INFO
+gym.egg-info/SOURCES.txt
+gym.egg-info/dependency_links.txt
+gym.egg-info/requires.txt
+gym.egg-info/top_level.txt
+gym/static/style.css
+gym/templates/layout.html
+gym/templates/show_members.html

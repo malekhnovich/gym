@@ -6,7 +6,8 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-
+from forms import AddEmployeeForm,DeleteEmployeeForm
+from gym import app
 
 app.config.update(dict(
     DATABASE="gym.db",
@@ -55,11 +56,57 @@ def close_db(error):
 #___________routes______________________
 
 @app.route('/')
-def show_entries():
+def get_classes():
     db = get_db()
-    cur = db.execute('select * from Member')
-    members = cur.fetchall()
-    return render_template('show_members.html', entries=members)
+    c = db.cursor()
+    cur =  db.execute( "select distinct c.startTime,c.duration, e.name,e.description  from Class c join Exercise e join Instructor i")
+    classes = cur.fetchall()
+    # classes = cur.executemany(x)
+
+    #keep point what you want to refer to it as in templates
+    return render_template("show_classes.html", classes =  classes)
+
+
+@app.route('/show_employees')
+def get_employees():
+    db = get_db()
+    c = db.cursor()
+    cur =  db.execute( "select distinct i.id,i.name from Instructor i")
+    employees = cur.fetchall()
+    # classes = cur.executemany(x)
+
+    #keep point what you want to refer to it as in templates
+    return render_template("show_employees.html", employees =  employees)
+
+@app.route('/add_employee')
+def add_employee():
+    form = AddEmployeeForm()
+    # name= request.form['name']
+    # type  = request.form['job_status']
+    db = get_db()
+    # cur = db.execute("insert into instructor (?,?) values(id,name)")
+    return render_template("add_employee.html",title="add employee",form=form)
+
+
+@app.route('/delete_employee')
+def delete_employee():
+    db = get_db()
+    form = DeleteEmployeeForm()
+    # TODO:must remember to remove instructor from additional table (external or fulltime)
+    # cur = db.execute("Delete from instructor where id = ?",id)
+    # employees = cur.fetchall()
+    # # classes = cur.executemany(x)
+    # keep point what you want to refer to it as in templates
+    return render_template("delete_employee.html", title = "delete employee", form=form)
+
+
+
+
+    # @app.route('/exercise_signup',methods= ['POST'])
+# def sign_up():
+#     db = get_db()
+#     cur = db.execute('insert into Class(instructorID, startTime,duration) values (?,?,?)',
+#                [request.form['instructorID'],request.form['startTime'],request.form['duration']])
 
 
 # @app.route('/add', methods=['POST'])
