@@ -61,8 +61,17 @@ def show_entries():
     members = cur.fetchall()
     return render_template('show_members.html', entries=members)
 
+if __name__ == '__main__':
+    app.debug = True
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
-# @app.route('/add', methods=['POST'])
+
+
+
+
+
+        # @app.route('/add', methods=['POST'])
 # def add_entry():
 #     if not session.get('logged_in'):
 #         abort(401)
