@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+<ul>{{ members }}</ul>
+{% block body %}
+
+  <ul class="classes">
+
+  {% for class in classes %}
+    <li><h2>Start Time {{class.startTime}}</h2>
+        <h2>Exercise {{class.name}}</h2>
+  {% else %}
+    <li><em>Unbelievable.  No classes here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
