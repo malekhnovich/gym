@@ -102,7 +102,7 @@ def delete_employee():
     db = get_db()
     form = DeleteEmployeeForm()
     # TODO:must remember to remove instructor from additional table (external or fulltime)
-    # cur = db.execute("Delete from instructor where id = ?",id)
+    cur = db.execute("Delete from instructor where id = ?",id)
     # employees = cur.fetchall()
     # # classes = cur.executemany(x)
     # keep point what you want to refer to it as in templates
@@ -111,7 +111,48 @@ def delete_employee():
 @app.route('/payroll')
 def view_payroll():
     db = get_db()
-    form =
+    # 10% federal tax, 5% state tax and 3% for other taxes
+    cur = db.execute("Select * from FullTimeInstructor")
+    fulltimeEmp = cur.fetchall()
+    cur2 = db.execute("Select * from ExternalInstructor")
+    externalEmp = cur2.fetchall()
+    curMonthly = db.execute("Select ft.salary from FullTimeInstructor ft")
+    monthlySalaries = curMonthly.fetchall()
+    curPT = db.execute("Select (et.hourlywage*et.hoursTaught)  from ExternalInstructor et")
+    externalEmpMonthly = curPT.fetchall()
+    # curYearly = db.execute("Select ft.id, ft.salary*12 from FullTimeInstructor ft")
+    curMonthly = db.execute("Select ft.salary from FullTimeInstructor ft")
+    fullEmpMonthly = curMonthly.fetchall()
+    #print(externalEmpMonthly[0][0])
+    print("external monthly salary is")
+    exYearlySalary = list()
+    exMonthlyTax = list()
+    fullYearlySalary = list()
+    fullMonthlyTax = list()
+    for x in range(len(externalEmpMonthly)):
+        salary = externalEmpMonthly[x][0]
+        yearly_salary = salary*12
+        exYearlySalary.append(yearly_salary)
+        monthlyTax = salary*(.10)+salary*(.05)+salary*(.03)
+        exMonthlyTax.append(monthlyTax)
+    for x in range(len(fullEmpMonthly)):
+        salary = fullEmpMonthly[x][0]
+        yearly_salary = salary*12
+        fullYearlySalary.append(yearly_salary)
+        yearlyTax = salary*(.10)+salary*(.05)+salary*(.03)
+        fullMonthlyTax.append(yearlyTax)
+
+    # print("yearly fulltime salary is")
+    # print(yearlyFullTime)
+
+    #print(yearlyFullTime[0][0])
+    # print("yearly salary %(yearlyFullTime)d"%{yearlyFullTime})
+    return render_template("view_payroll.html",fulltimeEmp=fulltimeEmp,externalEmp=externalEmp,
+
+                           externalEmpMonthly = externalEmpMonthly,monthlySalaries = monthlySalaries,
+                           exYearlyTax = exMonthlyTax, exYearlySalary= exYearlySalary,
+                           fullYearlyTax=fullMonthlyTax,fullYearlySalary=fullYearlySalary)
+
 
 
 

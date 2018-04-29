@@ -13,6 +13,10 @@ class AddEmployeeForm(FlaskForm):
     submit = SubmitField("Add Employee")
 
 
+
+
+#NOT SURE IF WE STILL NEED THIS FORM
 class DeleteEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
+
     submit = SubmitField("Delete Employee")

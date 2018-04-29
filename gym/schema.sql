@@ -10,15 +10,28 @@ drop table if exists FullTimeInstructor ;
 drop table if exists ExternalInstructor;
 
 create table Member (mID int NOT NULL, name varchar(20), isActive boolean, mbrshipID int, PRIMARY KEY(mID), FOREIGN KEY(mbrshipID) REFERENCES Membership(id));
+
 create table Membership (id int NOT NULL, name varchar(20) ,fee float,PRIMARY KEY(id));
+
 create table MembershipBenefits(mbrshipID int NOT NULL, benefitID int NOT NULL, FOREIGN KEY(mbrshipID) REFERENCES Membership(id), FOREIGN KEY(benefitID) REFERENCES Benefit(id));
+
 create table Benefit (id int NOT NULL, name varchar(20), description varchar(20),PRIMARY KEY(id));
-Create table Class (instructorID int NOT NULL, startTime time,duration int,PRIMARY KEY(instructorID));
+
+Create table Class (classId int NOT NULL, instructorID int NOT NULL, startTime time,duration int, exerciseID int NOT NULL ,  BuildingID int NOT NULL,roomID int NOT NULL,FOREIGN KEY(instructorID) REFERENCES Instructor(id), FOREIGN KEY(exerciseID) REFERENCES Exercise(id), FOREIGN KEY(roomID) REFERENCES Room(id), FOREIGN KEY(BuildingID) REFERENCES Room(building), PRIMARY KEY(classId));
+
 create table Exercise(id int NOT NULL, name varchar(20), description varchar(20), PRIMARY KEY(id));
+
+
+
 create table Room(building varchar(20) NOT NULL , room varchar(20) NOT NULL, capacity int,PRIMARY KEY(building,room));
-create table Instructor(id int NOT NULL AUTOINCREMENT, name varchar(20), PRIMARY KEY(id));
+
+create table Instructor(id int NOT NULL, name varchar(20), PRIMARY KEY(id));
+
 create table FullTimeInstructor(id int NOT NULL, name varchar(20), salary float,PRIMARY KEY(id));
+
 create table ExternalInstructor(id int NOT NULL, name varchar(20), hoursTaught int, hourlywage float, PRIMARY KEY(id));
+
+Create table Enrolled(id int NOT NULL, classId int NOT NULL, FOREIGN KEY(id) REFERENCES Member(MID), FOREIGN KEY(classID) REFERENCES Class(MID));
 
 
 insert into Member values(1, 'steve', "TRUE", 1001);
@@ -73,4 +86,5 @@ Insert into Instructor values(3,'Cory Smith');
 Insert into FullTimeInstructor values(1,'Tom Hall',50000);
 Insert into ExternalInstructor values(2,'Jones Jack',30,57);
 Insert into ExternalInstructor values(3,'Cory Smith',60,23);
+
 
