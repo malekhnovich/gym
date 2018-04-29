@@ -17,13 +17,14 @@ create table MembershipBenefits(mbrshipID int NOT NULL, benefitID int NOT NULL, 
 
 create table Benefit (id int NOT NULL, name varchar(20), description varchar(20),PRIMARY KEY(id));
 
-Create table Class (classId int NOT NULL, instructorID int NOT NULL, startTime time,duration int, exerciseID int NOT NULL ,  BuildingID int NOT NULL,roomID int NOT NULL,FOREIGN KEY(instructorID) REFERENCES Instructor(id), FOREIGN KEY(exerciseID) REFERENCES Exercise(id), FOREIGN KEY(roomID) REFERENCES Room(id), FOREIGN KEY(BuildingID) REFERENCES Room(building), PRIMARY KEY(classId));
+Create table Class (classId int NOT NULL, instructorID int NOT NULL, startTime time,duration int, exerciseID int NOT NULL ,  buildingName Varchar(20) NOT NULL,roomID int NOT NULL,FOREIGN KEY(instructorID) REFERENCES Instructor(id), FOREIGN KEY(exerciseID) REFERENCES Exercise(id), FOREIGN KEY(roomID) REFERENCES Room(roomId), FOREIGN KEY(buildingName) REFERENCES Room(buildingName), PRIMARY KEY(classId));
+
 
 create table Exercise(id int NOT NULL, name varchar(20), description varchar(20), PRIMARY KEY(id));
 
 
 
-create table Room(building varchar(20) NOT NULL , room varchar(20) NOT NULL, capacity int,PRIMARY KEY(building,room));
+create table Room(buildingName varchar(20) NOT NULL , roomID int  NOT NULL, capacity int,PRIMARY KEY(buildingName,roomID));
 
 create table Instructor(id int NOT NULL, name varchar(20), PRIMARY KEY(id));
 
@@ -62,20 +63,21 @@ insert into Benefit values (2001,'locker', 'locker room access');
 insert into Benefit values (2002,'smoothie', 'smoothie bar access');
 insert into Benefit values (2003,'PT','personal trainer');
 
-Insert into Class values(1,'12:00:00',1);
-Insert into Class values(2,'10:00:00',2);
-Insert into Class values(3,'12:00:00',1);
-Insert into Class values(4,'10:00:00',1);
+Insert into Class values(1,1,'12:00:00',1,1,'Calhoun Hall',203);
+Insert into Class values(2,2,'10:00:00',2,2,'Calhoun Hall',203);
+Insert into Class values(3,3,'12:00:00',1,3,'Julio Hall',124);
+Insert into Class values(4,4,'10:00:00',1,4,'Calhoun Hall',203);
 
 
 Insert into Exercise values(1, 'bicep curl', 'hold dumbbell in hand and curl it focusing on the bicep muscle');
 Insert into Exercise values(2, 'Dips', 'rise up over the bars and bend elbow until level with bar, focus on triceps');
 Insert into Exercise values(3,'chest bench press','hold bar up and lower until bar hits chest and then rise back up');
+Insert into Exercise values(4,'shoulder press','sit and lift dumbells above shoulders and back down');
 
 
-Insert into Room values('Calhoun Hall', '203A', 30);
-Insert into Room values('Jones Hall', '113B', 20);
-Insert into Room values('Julio Hall', '24C', 54);
+Insert into Room values('Calhoun Hall', 203, 30);
+Insert into Room values('Jones Hall', 302, 20);
+Insert into Room values('Julio Hall', 124, 54);
 
 
 Insert into Instructor values(1,'Tom Hall');
@@ -88,3 +90,5 @@ Insert into ExternalInstructor values(2,'Jones Jack',30,57);
 Insert into ExternalInstructor values(3,'Cory Smith',60,23);
 
 
+Insert into Enrolled values(1,1);
+insert into Enrolled values(1,2);

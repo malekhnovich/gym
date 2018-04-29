@@ -59,7 +59,7 @@ def close_db(error):
 def get_classes():
     db = get_db()
     c = db.cursor()
-    cur =  db.execute( "select distinct c.startTime,c.duration, e.name,e.description  from Class c join Exercise e join Instructor i")
+    cur =  db.execute("select distinct c.startTime,c.duration, e.name,e.description  from Class c join Exercise e join Instructor i where e.id= c.exerciseID")
     classes = cur.fetchall()
     # classes = cur.executemany(x)
 
