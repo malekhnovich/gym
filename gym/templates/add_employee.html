@@ -38,6 +38,11 @@
          {{ form.hourlyWage.label }}<br>
              {{ form.hourlyWage(size=32) }}
      </p>
+
+     <p>
+         {{ form.hours.label }}<br>
+             {{ form.hours(size=32) }}
+     </p>
      <input type="hidden" name="type" value="External">
      <p>{{ form.submitExternal()}}</p>
 </form>

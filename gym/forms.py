@@ -20,5 +20,4 @@ class AddEmployeeForm(FlaskForm):
 class DeleteEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     id = StringField('id', validators=[DataRequired()])
-
     submit = SubmitField("Delete Employee")
