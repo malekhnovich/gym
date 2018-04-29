@@ -57,12 +57,16 @@ def close_db(error):
 
 @app.route('/')
 def get_classes():
+    #TODO:Pass in class id
+    classId = (1,)
     db = get_db()
     c = db.cursor()
-    cur =  db.execute("select distinct c.startTime,c.duration, e.name,e.description  from Class c join Exercise e join Instructor i where e.id= c.exerciseID")
+    cur =  db.execute("select c.buildingName, c.startTime, i.id,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id")
     classes = cur.fetchall()
     # classes = cur.executemany(x)
-
+    curClassSize = db.execute("select count(*) from Enrolled e where classId =?",classId)
+    classSize = curClassSize.fetchone()[0]
+    print(classSize)
     #keep point what you want to refer to it as in templates
     return render_template("show_classes.html", classes =  classes)
 

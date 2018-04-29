@@ -49,7 +49,10 @@ insert into Membership values(1002, 'Senior', 10);
 insert into Membership values(1003,'Gold',20);
 insert into Membership values(1004,'Platinum',50);
 
+-- select c.buildingName, c.startTime, i.id,i.name from Instructor i
+--   join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id;
 
+select count(*) from Enrolled where classId =2;
 
 Insert into MembershipBenefits values(1001,2001);
 Insert into MembershipBenefits values(1002,2001);
