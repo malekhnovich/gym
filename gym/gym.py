@@ -78,9 +78,13 @@ def get_employees():
     #keep point what you want to refer to it as in templates
     return render_template("show_employees.html", employees =  employees)
 
-@app.route('/add_employee')
+@app.route('/add_employee', methods=["POST", "GET"])
 def add_employee():
     form = AddEmployeeForm()
+
+    if request.method == "GET":
+        return render_template("add_employee.html",title="add employee",form=form)
+
     name = form.name.data
     type  = form.type.data
     salary = form.salary.data
@@ -94,8 +98,8 @@ def add_employee():
     if type=="FullTime":
         cur = db.execute("insert into FullTimeInstructor values (?,?,?)",(id,name,salary))
 
-    return render_template("add_employee.html",title="add employee",form=form)
-
+    #if the insert was successfull, idk how you'd check for that in Flask
+    return "New Employee Created"
 
 @app.route('/delete_employee')
 def delete_employee():
