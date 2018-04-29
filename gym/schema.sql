@@ -31,7 +31,7 @@ create table FullTimeInstructor(id int NOT NULL, name varchar(20), salary float,
 
 create table ExternalInstructor(id int NOT NULL, name varchar(20), hoursTaught int, hourlywage float, PRIMARY KEY(id));
 
-Create table Enrolled(id int NOT NULL, classId int NOT NULL, FOREIGN KEY(id) REFERENCES Member(MID), FOREIGN KEY(classID) REFERENCES Class(MID));
+Create table Enrolled(id int NOT NULL, classId int NOT NULL, FOREIGN KEY(id) REFERENCES Member(MID), FOREIGN KEY(classID) REFERENCES Class(classId));
 
 
 insert into Member values(1, 'steve', "TRUE", 1001);
