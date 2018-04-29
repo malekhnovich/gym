@@ -101,16 +101,28 @@ def add_employee():
     #if the insert was successfull, idk how you'd check for that in Flask
     return "New Employee Created"
 
-@app.route('/delete_employee')
+@app.route('/delete_employee', methods=["POST", "GET"])
 def delete_employee():
-    db = get_db()
     form = DeleteEmployeeForm()
+    db = get_db()
+
+    if request.method == "GET":
+        cur =  db.execute( "select distinct i.id,i.name from Instructor i")
+        employees = cur.fetchall()
+        return render_template("delete_employee.html", title = "delete employee", form=form, employees=employees)
+
+    id = form.id.data
+    #return id #for debugging
+
     # TODO:must remember to remove instructor from additional table (external or fulltime)
     cur = db.execute("Delete from instructor where id = ?",id)
     # employees = cur.fetchall()
     # # classes = cur.executemany(x)
     # keep point what you want to refer to it as in templates
-    return render_template("delete_employee.html", title = "delete employee", form=form)
+    #return render_template("delete_employee.html", title = "delete employee", form=form)
+
+    #if the insert was successfull, idk how you'd check for that in Flask
+    return "Employee Deleted"
 
 @app.route('/payroll')
 def view_payroll():
