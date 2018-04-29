@@ -11,14 +11,31 @@
 <body>
     {#  {% if session.logged_in %}#}
 {#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
-<form action="" method = "post">
+<h2>Full Time Employee</h2>
+<form action="{{ url_for('add_employee') }}" method = "post">
     <p>
         {{ form.name.label }}<br>
             {{ form.name(size=32) }}
-        </p>
     </p>
-    <p>{{ form.submit()}}</p>
+    <p>
+        {{ form.salary.label }}<br>
+            {{ form.salary(size=32) }}
+    </p>
+    <p>{{ form.submitFulltime()}}</p>
        </form>
+
+<h2>External Employee</h2>
+ <form action=action="{{ url_for('add_employee') }}" method = "post">
+     <p>
+         {{ form.name.label }}<br>
+             {{ form.name(size=32) }}
+     </p>
+     <p>
+         {{ form.hourlyWage.label }}<br>
+             {{ form.hourlyWage(size=32) }}
+     </p>
+     <p>{{ form.submitExternal()}}</p>
+</form>
 </body>
 </html>
 
