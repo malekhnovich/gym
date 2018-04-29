@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><!DOCTYPE html>
+    <title>Add Employee</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Employee Addition</title>
 </head>
 <body>
+<div class="page">
     {#  {% if session.logged_in %}#}
 {#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
 <h2>Full Time Employee</h2>
@@ -24,7 +26,8 @@
     <input type="hidden" name="type" value="FullTime">
     <p>{{ form.submitFulltime()}}</p>
        </form>
-
+</div>
+<div class="page">
 <h2>External Employee</h2>
  <form action="{{ url_for('add_employee') }}" method = "post">
      <p>
@@ -38,6 +41,7 @@
      <input type="hidden" name="type" value="External">
      <p>{{ form.submitExternal()}}</p>
 </form>
+</div>
 </body>
 </html>
 
