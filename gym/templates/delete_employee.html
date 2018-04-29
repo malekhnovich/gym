@@ -11,15 +11,29 @@
 <body>
     {#  {% if session.logged_in %}#}
 {#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
-<form action="" method = "post">
-    <p>
-        {{ form.name.label }}<br>
-            {{ form.name(size=32) }}
-        </p>
-    </p>
-    <p>{{ form.submit()}}</p>
-       </form>
-</body>
+
+<table>
+  <tr>
+    <th>Employee ID</th>
+    <th>Name</th>
+  </tr>
+  {% for employee in employees %}
+  <tr>
+    <td>{{employee.id}}</td>
+    <td>{{employee.name}}</td>
+    <td>
+      <form action="{{ url_for('delete_employee') }}" method = "post">
+        <input type="hidden" name="id" value="{{employee.id}}">
+        {{ form.submit()}}
+      </form>
+    </td>
+  <tr>
+  {% else %}
+    No employees so far
+  {% endfor %}
+</table>
+
+
 </html>
 
 
