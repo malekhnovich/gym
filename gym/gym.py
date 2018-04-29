@@ -81,10 +81,19 @@ def get_employees():
 @app.route('/add_employee')
 def add_employee():
     form = AddEmployeeForm()
-    # name= request.form['name']
-    # type  = request.form['job_status']
+    name = form.name.data
+    type  = form.type.data
+    salary = form.salary.data
+    hourlyWage = form.hourlyWage.data
+    hours = form.hours.data
+
     db = get_db()
-    # cur = db.execute("insert into instructor (?,?) values(id,name)")
+    cur = db.execute("insert into instructor values(?,?)", (id,name))
+    if type=="External":
+        cur = db.execute("insert into ExternalInstructor values (?,?,?,?)",(id,name,hours,hourlyWage))
+    if type=="FullTime":
+        cur = db.execute("insert into FullTimeInstructor values (?,?,?)",(id,name,salary))
+
     return render_template("add_employee.html",title="add employee",form=form)
 
 
@@ -99,6 +108,10 @@ def delete_employee():
     # keep point what you want to refer to it as in templates
     return render_template("delete_employee.html", title = "delete employee", form=form)
 
+@app.route('/payroll')
+def view_payroll():
+    db = get_db()
+    form =
 
 
 
