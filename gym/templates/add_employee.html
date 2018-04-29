@@ -21,11 +21,12 @@
         {{ form.salary.label }}<br>
             {{ form.salary(size=32) }}
     </p>
+    <input type="hidden" name="type" value="FullTime">
     <p>{{ form.submitFulltime()}}</p>
        </form>
 
 <h2>External Employee</h2>
- <form action=action="{{ url_for('add_employee') }}" method = "post">
+ <form action="{{ url_for('add_employee') }}" method = "post">
      <p>
          {{ form.name.label }}<br>
              {{ form.name(size=32) }}
@@ -34,6 +35,7 @@
          {{ form.hourlyWage.label }}<br>
              {{ form.hourlyWage(size=32) }}
      </p>
+     <input type="hidden" name="type" value="External">
      <p>{{ form.submitExternal()}}</p>
 </form>
 </body>

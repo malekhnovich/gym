@@ -10,7 +10,8 @@ class AddEmployeeForm(FlaskForm):
     salary = FloatField('salary', validators = [[DataRequired()]])
     hourlyWage = FloatField('hourlyWage', validators=[[DataRequired()]])
     hours  = FloatField('hours',validators = [[DataRequired()]])
-    submit = SubmitField("Add Employee")
+    submitFulltime = SubmitField("Add Fulltime Employee")
+    submitExternal = SubmitField("Add External Employee")
 
 
 
