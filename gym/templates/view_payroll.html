@@ -38,6 +38,8 @@
     <th>Hours Taught (Monthly)</th>
       <th></th>
       <th>Hourly Wage</th>
+      <th>Monthly Salary</th>
+      <th></th>
       <th>Monthly Tax</th>
   </tr>
   {% for extm in extEmpMonthlyTax%}
@@ -48,7 +50,8 @@
       <td>{{ extm.hoursTaught }}</td>
       <th></th>
     <td>{{extm.hourlywage}}</td>
-      <th></th>
+
+      <td>{{ extm.salary }}</td>
     <td>{{extm.tax}}</td>
     {% endfor %}
 

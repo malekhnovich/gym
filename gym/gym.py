@@ -144,7 +144,7 @@ def delete_employee():
 def view_payroll():
     db = get_db()
     # 10% federal tax, 5% state tax and 3% for other taxes
-    externalMonthlyTaxCur = db.execute("Select distinct ei.id,ei.name,ei.hoursTaught,ei.hourlywage,((ei.hourlywage*ei.hoursTaught)*(0.10)+(ei.hourlywage*ei.hoursTaught)*(0.05)+(ei.hourlywage*ei.hoursTaught)*(0.03)) as tax from ExternalInstructor ei")
+    externalMonthlyTaxCur = db.execute("Select distinct ei.id,ei.name,ei.hoursTaught,ei.hourlywage,((ei.hourlywage*ei.hoursTaught)*(0.10)+(ei.hourlywage*ei.hoursTaught)*(0.05)+(ei.hourlywage*ei.hoursTaught)*(0.03)) as tax, ei.hourlywage*ei.hoursTaught as salary from ExternalInstructor ei")
     eemTax = externalMonthlyTaxCur.fetchall()
     # curYearly = db.execute("Select ft.id, ft.salary*12 from FullTimeInstructor ft")
     curMonthlyTax = db.execute("Select distinct ft.id,ft.name,ft.salary, (((ft.salary*(.10))+(ft.salary*(.05))+(ft.salary*(0.03)))) as tax from FullTimeInstructor ft")
