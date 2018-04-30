@@ -95,15 +95,19 @@ def add_employee():
     hourlyWage = form.hourlyWage.data
     hours = form.hours.data
 
-    db = get_db()
-    cur = db.execute("insert into instructor values(?,?)", (id,name))
-    if type=="External":
-        cur = db.execute("insert into ExternalInstructor values (?,?,?,?)",(id,name,hours,hourlyWage))
-    if type=="FullTime":
-        cur = db.execute("insert into FullTimeInstructor values (?,?,?)",(id,name,salary))
 
+    db = get_db()
+    cur = db.execute("insert into instructor values(?,?)", (None,name))
+    if request.form['type']=="External":
+        print('inserting external')
+        cur = db.execute("insert into ExternalInstructor values (?,?,?,?)",(None,name,hours,hourlyWage))
+    if request.form['type']=="FullTime":
+        cur = db.execute("insert into FullTimeInstructor values (?,?,?)",(None,name,salary))
+        print('inserting fulltime')
+
+    db.commit()
     #if the insert was successfull, idk how you'd check for that in Flask
-    return "New Employee Created"
+    return redirect(url_for('get_employees'))
 
 @app.route('/delete_employee', methods=["POST", "GET"])
 def delete_employee():
@@ -118,60 +122,61 @@ def delete_employee():
     id = form.id.data
     #return id #for debugging
 
-    # TODO:must remember to remove instructor from additional table (external or fulltime)
-    cur = db.execute("Delete from instructor where id = ?",id)
+    curId = db.execute("Select ft.id from FullTimeInstructor ft")
+    cur = db.execute("Delete from instructor where id = ?", id)
+    ids = [r[0] for r in cur.fetchall()]
+    print(ids)
+    if id in curId.fetchall():
+        cur2 = db.execute("Delete from FullTimeInstructor where id = ?",id)
+
+    else:
+        cur2 =db.execute("Delete from ExternalInstructor where id = ?",id)
+    db.commit()
     # employees = cur.fetchall()
     # # classes = cur.executemany(x)
     # keep point what you want to refer to it as in templates
     #return render_template("delete_employee.html", title = "delete employee", form=form)
 
     #if the insert was successfull, idk how you'd check for that in Flask
-    return "Employee Deleted"
+    return redirect(url_for('get_employees'))
 
 @app.route('/payroll')
 def view_payroll():
     db = get_db()
     # 10% federal tax, 5% state tax and 3% for other taxes
-    cur = db.execute("Select * from FullTimeInstructor")
-    fulltimeEmp = cur.fetchall()
-    cur2 = db.execute("Select * from ExternalInstructor")
-    externalEmp = cur2.fetchall()
-    curMonthly = db.execute("Select ft.salary from FullTimeInstructor ft")
-    monthlySalaries = curMonthly.fetchall()
-    curPT = db.execute("Select (et.hourlywage*et.hoursTaught)  from ExternalInstructor et")
-    externalEmpMonthly = curPT.fetchall()
+    externalMonthlyTaxCur = db.execute("Select distinct ei.id,ei.name,ei.hoursTaught,ei.hourlywage,((ei.hourlywage*ei.hoursTaught)*(0.10)+(ei.hourlywage*ei.hoursTaught)*(0.05)+(ei.hourlywage*ei.hoursTaught)*(0.03)) as tax from ExternalInstructor ei")
+    eemTax = externalMonthlyTaxCur.fetchall()
     # curYearly = db.execute("Select ft.id, ft.salary*12 from FullTimeInstructor ft")
-    curMonthly = db.execute("Select ft.salary from FullTimeInstructor ft")
-    fullEmpMonthly = curMonthly.fetchall()
+    curMonthlyTax = db.execute("Select distinct ft.id,ft.name,ft.salary, (((ft.salary*(.10))+(ft.salary*(.05))+(ft.salary*(0.03)))) as tax from FullTimeInstructor ft")
+    femTax = curMonthlyTax.fetchall()
+    #fullEmpMonthlyTax = curMonthlyTax.fetchall()
+    print(femTax)
     #print(externalEmpMonthly[0][0])
-    print("external monthly salary is")
-    exYearlySalary = list()
-    exMonthlyTax = list()
-    fullYearlySalary = list()
-    fullMonthlyTax = list()
-    for x in range(len(externalEmpMonthly)):
-        salary = externalEmpMonthly[x][0]
-        yearly_salary = salary*12
-        exYearlySalary.append(yearly_salary)
-        monthlyTax = salary*(.10)+salary*(.05)+salary*(.03)
-        exMonthlyTax.append(monthlyTax)
-    for x in range(len(fullEmpMonthly)):
-        salary = fullEmpMonthly[x][0]
-        yearly_salary = salary*12
-        fullYearlySalary.append(yearly_salary)
-        yearlyTax = salary*(.10)+salary*(.05)+salary*(.03)
-        fullMonthlyTax.append(yearlyTax)
+    # exYearlySalary = list()
+    # exMonthlyTax = list()
+    # fullYearlySalary = list()
+    # fullMonthlyTax = list()
+    # for x in range(len(externalEmpMonthly)):
+    #     salary = externalEmpMonthly[x][0]
+    #     yearly_salary = salary*12
+    #     exYearlySalary.append(yearly_salary)
+    #     monthlyTax = salary*(.10)+salary*(.05)+salary*(.03)
+    #     exMonthlyTax.append(monthlyTax)
+    # for x in range(len(fullEmpMonthly)):
+    #     salary = fullEmpMonthly[x][0]
+    #     yearly_salary = salary*12
+    #     fullYearlySalary.append(yearly_salary)
+    #     monthlyTax = salary*(.10)+salary*(.05)+salary*(.03)
+    #     print(monthlyTax)
+    #     fullMonthlyTax.append(monthlyTax)
 
+#    print(fullEmpMonthlyTax)
     # print("yearly fulltime salary is")
     # print(yearlyFullTime)
 
     #print(yearlyFullTime[0][0])
     # print("yearly salary %(yearlyFullTime)d"%{yearlyFullTime})
-    return render_template("view_payroll.html",fulltimeEmp=fulltimeEmp,externalEmp=externalEmp,
-
-                           externalEmpMonthly = externalEmpMonthly,monthlySalaries = monthlySalaries,
-                           exYearlyTax = exMonthlyTax, exYearlySalary= exYearlySalary,
-                           fullYearlyTax=fullMonthlyTax,fullYearlySalary=fullYearlySalary)
+    return render_template("view_payroll.html",extEmpMonthlyTax = eemTax,fullEmpMonthlyTax=femTax)
 
 
 

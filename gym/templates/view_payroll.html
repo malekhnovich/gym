@@ -2,9 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>payroll</title>
+    <title>Payroll for Month</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+    {#  {% if session.logged_in %}#}
+{#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
+<div class="page">
+<h2>Payroll</h2><br>
+<h3>Full Time Employees</h3>
+<table>
+  <tr>
+    <th>Employee Name</th>
+      <th></th>
+    <th>Monthly Salary</th>
+      <th></th>
+    <th>Monthly Tax</th>
 
+  </tr>
+  {% for ftm in fullEmpMonthlyTax%}
+
+  <tr>
+    <td>{{ftm.name}}</td>
+      <th></th>
+    <td>{{ftm.salary}}</td>
+    <td>{{ftm.tax}}</td>
+    {% endfor %}
+
+    </tr>
+</table>
+<h3>External Employees</h3>
+<table>
+  <tr>
+    <th>Employee Name</th>
+      <th></th>
+    <th>Hours Taught (Monthly)</th>
+      <th></th>
+      <th>Hourly Wage</th>
+      <th>Monthly Tax</th>
+  </tr>
+  {% for extm in extEmpMonthlyTax%}
+
+  <tr>
+    <td>{{extm.name}}</td>
+      <th></th>
+      <td>{{ extm.hoursTaught }}</td>
+      <th></th>
+    <td>{{extm.hourlywage}}</td>
+      <th></th>
+    <td>{{extm.tax}}</td>
+    {% endfor %}
+
+
+
+  <tr>
+</table>
+</div>
 </body>
 </html>

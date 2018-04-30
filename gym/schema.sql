@@ -8,29 +8,30 @@ drop table if exists Room ;
 drop table if exists Instructor;
 drop table if exists FullTimeInstructor ;
 drop table if exists ExternalInstructor;
+drop table if exists Enrolled;
 
-create table Member (mID int NOT NULL, name varchar(20), isActive boolean, mbrshipID int, PRIMARY KEY(mID), FOREIGN KEY(mbrshipID) REFERENCES Membership(id));
+create table Member (mID INTEGER  PRIMARY KEY AUTOINCREMENT , name varchar(20), isActive boolean, mbrshipID int, FOREIGN KEY(mbrshipID) REFERENCES Membership(id));
 
-create table Membership (id int NOT NULL, name varchar(20) ,fee float,PRIMARY KEY(id));
+create table Membership (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(20) ,fee float);
 
-create table MembershipBenefits(mbrshipID int NOT NULL, benefitID int NOT NULL, FOREIGN KEY(mbrshipID) REFERENCES Membership(id), FOREIGN KEY(benefitID) REFERENCES Benefit(id));
+create table MembershipBenefits(mbrshipID INTEGER  PRIMARY KEY AUTOINCREMENT, benefitID int NOT NULL, FOREIGN KEY(mbrshipID) REFERENCES Membership(id), FOREIGN KEY(benefitID) REFERENCES Benefit(id));
 
-create table Benefit (id int NOT NULL, name varchar(20), description varchar(20),PRIMARY KEY(id));
+create table Benefit (id INTEGER  PRIMARY KEY AUTOINCREMENT, name varchar(20), description varchar(20));
 
-Create table Class (classId int NOT NULL, instructorID int NOT NULL, startTime time,duration int, exerciseID int NOT NULL ,  buildingName Varchar(20) NOT NULL,roomID int NOT NULL,FOREIGN KEY(instructorID) REFERENCES Instructor(id), FOREIGN KEY(exerciseID) REFERENCES Exercise(id), FOREIGN KEY(roomID) REFERENCES Room(roomId), FOREIGN KEY(buildingName) REFERENCES Room(buildingName), PRIMARY KEY(classId));
+Create table Class (classId INTEGER  PRIMARY KEY AUTOINCREMENT, instructorID int NOT NULL, startTime time,duration int, exerciseID int NOT NULL ,  buildingName Varchar(20) NOT NULL,roomID int NOT NULL,FOREIGN KEY(instructorID) REFERENCES Instructor(id), FOREIGN KEY(exerciseID) REFERENCES Exercise(id), FOREIGN KEY(roomID) REFERENCES Room(roomId), FOREIGN KEY(buildingName) REFERENCES Room(buildingName));
 
 
-create table Exercise(id int NOT NULL, name varchar(20), description varchar(20), PRIMARY KEY(id));
+create table Exercise(id INTEGER  PRIMARY KEY AUTOINCREMENT, name varchar(20), description varchar(20));
 
 
 
 create table Room(buildingName varchar(20) NOT NULL , roomID int  NOT NULL, capacity int,PRIMARY KEY(buildingName,roomID));
 
-create table Instructor(id int NOT NULL, name varchar(20), PRIMARY KEY(id));
+create table Instructor(id INTEGER  PRIMARY KEY AUTOINCREMENT, name varchar(20));
 
-create table FullTimeInstructor(id int NOT NULL, name varchar(20), salary float,PRIMARY KEY(id));
+create table FullTimeInstructor(id int , name varchar(20), salary float,PRIMARY KEY(id));
 
-create table ExternalInstructor(id int NOT NULL, name varchar(20), hoursTaught int, hourlywage float, PRIMARY KEY(id));
+create table ExternalInstructor(id int , name varchar(20), hoursTaught int, hourlywage float, PRIMARY KEY(id));
 
 Create table Enrolled(id int NOT NULL, classId int NOT NULL, FOREIGN KEY(id) REFERENCES Member(MID), FOREIGN KEY(classID) REFERENCES Class(classId));
 
@@ -53,18 +54,18 @@ insert into Membership values(1004,'Platinum',50);
 --   join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id;
 
 -- select count(*) from Enrolled where classId =2;
+select * from Instructor;
+Insert into MembershipBenefits values(1 ,1);
+Insert into MembershipBenefits values(2,1);
+Insert into MembershipBenefits values(3,1);
+Insert into MembershipBenefits values(4,1);
+Insert into MembershipBenefits values(5,1);
+Insert into MembershipBenefits values(6,2);
+Insert into MembershipBenefits values(7,3);
 
-Insert into MembershipBenefits values(1001,2001);
-Insert into MembershipBenefits values(1002,2001);
-Insert into MembershipBenefits values(1003,2001);
-Insert into MembershipBenefits values(1004,2001);
-Insert into MembershipBenefits values(1002,2002);
-Insert into MembershipBenefits values(1004,2002);
-Insert into MembershipBenefits values(1004,2003);
-
-insert into Benefit values (2001,'locker', 'locker room access');
-insert into Benefit values (2002,'smoothie', 'smoothie bar access');
-insert into Benefit values (2003,'PT','personal trainer');
+insert into Benefit values (1,'locker', 'locker room access');
+insert into Benefit values (2,'smoothie', 'smoothie bar access');
+insert into Benefit values (3,'PT','personal trainer');
 
 Insert into Class values(1,1,'12:00:00',1,1,'Calhoun Hall',203);
 Insert into Class values(2,2,'10:00:00',2,2,'Calhoun Hall',203);
@@ -87,6 +88,7 @@ Insert into Instructor values(1,'Tom Hall');
 Insert into Instructor values(2, 'Jones Jack');
 Insert into Instructor values(3,'Cory Smith');
 
+select * from FullTimeInstructor;
 
 Insert into FullTimeInstructor values(1,'Tom Hall',50000);
 Insert into ExternalInstructor values(2,'Jones Jack',30,57);
@@ -95,3 +97,10 @@ Insert into ExternalInstructor values(3,'Cory Smith',60,23);
 
 Insert into Enrolled values(1,1);
 insert into Enrolled values(1,2);
+
+
+-- select * from FullTimeInstructor;
+-- select * from ExternalInstructor;
+-- select * from Instructor;
+--
+-- Select ((ft.salary*(.10))+(ft.salary*(.05))+(ft.salary*(0.03))) as tax from FullTimeInstructor ft
