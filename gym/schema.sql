@@ -90,7 +90,7 @@ Insert into Instructor values(3,'Cory Smith');
 
 select * from FullTimeInstructor;
 
-Insert into FullTimeInstructor values(1,'Tom Hall',50000);
+Insert into FullTimeInstructor values(1,'Tom Hall',5000);
 Insert into ExternalInstructor values(2,'Jones Jack',30,57);
 Insert into ExternalInstructor values(3,'Cory Smith',60,23);
 
