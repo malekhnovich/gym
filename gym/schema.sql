@@ -104,3 +104,4 @@ insert into Enrolled values(1,2);
 -- select * from Instructor;
 --
 -- Select ((ft.salary*(.10))+(ft.salary*(.05))+(ft.salary*(0.03))) as tax from FullTimeInstructor ft
+-- select c.buildingName, c.startTime, i.id,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id where classId =1;

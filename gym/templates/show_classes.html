@@ -1,14 +1,58 @@
 {% extends "layout.html" %}
-<ul>{{ members }}</ul>
 {% block body %}
+    <html>
+<head>
+    <meta charset="UTF-8">
+    <title>Classes</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+</head>
+    <body>
+    <div class="page">
 
-  <ul class="classes">
-
+    <table>
+  <tr>
+    <th>Start Time</th>
+    <th>Exercise</th>
+      <th>Description</th>
+    <th>Instructor</th>
+      <th>Building Name</th>
+      <th>Room Number</th>
+  <th>Spots available</th>
+  </tr>
   {% for class in classes %}
-    <li><h2>Start Time {{class.startTime}}</h2>
-        <h2>Exercise {{class.name}}</h2>
-  {% else %}
-    <li><em>Unbelievable.  No classes here so far</em>
+  <tr>
+      <td>{{class.startTime}}</td>
+      <td>{{ class.exerciseName }}</td>
+      <td>{{class.description}}</td>
+      <td>{{ class.instructorName }}</td>
+       <td>{{ class.buildingName }}</td>
+      <td>{{ class.roomId }}</td>
+      <td>{{ capacity-enrolled }}</td>
+    {% if (capacity-enrolled!=0) %}
+    <td><form action ="{{ url_for('get_classes') }}" method = "post">
+            <input type ="hidden" name ="id" value="{{ class.instructorId }}">
+            <input type = "hidden" name = "classId" value ="{{ class.classId }}">
+            <input type="hidden" name = "roomCap" value = "{{ class.roomCap }}">
+            {{form.submitJoinClass()}}
+        </form>
+    {% endif %}
+        {% if (capacity-enrolled==0) %}
+        <td><b>FULL CLASS</b></td>
+    <td><form action ="{{ url_for('get_classes') }}" method = "post">
+            <input type ="hidden" name ="id" value="{{ class.instructorId }}">
+            <input type = "hidden" name = "classId" value ="{{ class.classId }}">
+            <input type="hidden" name = "roomCap" value = "{{ class.roomCap }}">
+            {{backForm.submitCheckClasses()}}
+        </form>
+    {% endif %}
+    </td>
+  </tr>
+      {% else %}
+      No classes so far
   {% endfor %}
-  </ul>
+
 {% endblock %}
+</table>
+</div>
+ </body>
+</html>

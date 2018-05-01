@@ -19,5 +19,23 @@ class AddEmployeeForm(FlaskForm):
 #NOT SURE IF WE STILL NEED THIS FORM
 class DeleteEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
-    id = StringField('id', validators=[DataRequired()])
+    id = FloatField('id', validators=[DataRequired()])
     submit = SubmitField("Delete Employee")
+
+class SeeClassForm(FlaskForm):
+    instructorId = FloatField('instructorId',validators = [DataRequired()])
+    classId = FloatField('classId',validators=[DataRequired()])
+    roomCap = FloatField("roomCap", validators=[DataRequired()])
+    submitSeeDetails = SubmitField("See Class Details")
+
+class JoinClassForm(FlaskForm):
+    instructorId = FloatField('instructorId',validators = [DataRequired()])
+    classId = FloatField('classId',validators=[DataRequired()])
+    roomCap = FloatField("roomCap",validators=[DataRequired()])
+    submitJoinClass = SubmitField("Join Class")
+
+class checkClassesForm(FlaskForm):
+    instructorId = FloatField('instructorId', validators=[DataRequired()])
+    classId = FloatField('classId', validators=[DataRequired()])
+    roomCap = FloatField("roomCap", validators=[DataRequired()])
+    submitCheckClasses = SubmitField("Go back")
