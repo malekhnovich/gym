@@ -107,6 +107,7 @@ def sign_up():
     cur = db.execute(
         "select  e.name as exerciseName,e.description,i.name as instructorName,r.roomID as roomId, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join room r on r.roomID = c.roomID where classId =?",(classId,))
     classes = cur.fetchall()
+
     # print("the capacity of this room is ",roomCap)
     print("the number of enrolled are",getEnrolled)
     if(enrolled>capacity):
