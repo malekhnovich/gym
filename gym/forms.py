@@ -13,6 +13,9 @@ class AddEmployeeForm(FlaskForm):
     submitFulltime = SubmitField("Add Fulltime Employee")
     submitExternal = SubmitField("Add External Employee")
 
+class EditEmployeeForm(FlaskForm):
+    name = StringField('name', validators=[DataRequired()])
+    submit = SubmitField("Edit Employee")
 
 class DeleteEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
