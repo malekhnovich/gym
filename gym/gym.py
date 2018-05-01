@@ -8,7 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-from forms import AddEmployeeForm,DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
+from forms import deleteExerciseForm, addExerciseForm, AddEmployeeForm,DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
 from gym import app
 
 app.config.update(dict(
@@ -200,6 +200,56 @@ def delete_employee():
 
     #if the insert was successfull, idk how you'd check for that in Flask
     return redirect(url_for('get_employees'))
+@app.route('/view_exercises')
+def view_exercises():
+    db = get_db()
+    curExercise = db.execute("Select e.name,e.description from exercise e")
+    exercises = curExercise.fetchall()
+    return render_template('view_exercises.html',exercises=exercises)
+
+@app.route('/add_exercises',methods=["POST", "GET"])
+def add_exercises():
+    form = addExerciseForm()
+    if request.method == "GET":
+        return render_template("add_exercises.html", title="add exercises", form=form)
+
+
+    name = form.exerciseName.data
+    description = form.exerciseDescription.data
+    db = get_db()
+    curAddExercise = db.execute("insert into exercise VALUES (?,?,?)",(None,name,description))
+
+    curAddExercise.fetchall()
+    curdeleteNone = db.execute("Delete from exercise where name =?",None)
+    db.commit()
+    return redirect('view_exercises')
+
+@app.route('/delete_exercise',methods=["POST", "GET"])
+def delete_exercise():
+    form = deleteExerciseForm()
+    db = get_db()
+
+    if request.method == "GET":
+        cur = db.execute("select distinct e.id,e.name from exercise e")
+        exercises = cur.fetchall()
+        return render_template("delete_exercise.html", title="delete exercise", form=form, exercises=exercises)
+
+    id = form.exerciseId.data
+    id = int(str(id)[:1])
+    print(id)
+    # curId = db.execute("Select ft.name from FullTimeInstructor ft where id = ?",(id,))
+
+    # deleteExercise = db.execute("Delete from Exercise where id = ?", (id,))
+    getClasses = db.execute("Select id from Class where exerciseID = ?", (id,))
+    classesToDelete = getClasses.fetchall()
+    # deleteClass = db.execute("Delete from Class where exerciseID = ?",(id,))
+    # deleteEnrolled = db.execute("Delete from Enrolled where classId")
+
+    db.commit()
+    return redirect(url_for('view_exercises'))
+
+
+
 
 @app.route('/payroll')
 def view_payroll():

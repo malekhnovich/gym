@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Exercise</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercise Addition</title>
+</head>
+<body>
+<div class="page"><b>Add Exercise</b>
+    {#  {% if session.logged_in %}#}
+{#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
+
+<form action="{{ url_for('add_exercises') }}" method = "post">
+    <p>
+        {{ form.exerciseName.label }}<br>
+            {{ form.exerciseName(size=32) }}
+    </p>
+    <p>
+        {{ form.exerciseDescription.label }}<br>
+            {{ form.exerciseDescription(size=32) }}
+    </p>
+    <input type="hidden" name="type" value="exercise">
+    <p>{{ form.submitAddExercise()}}</p>
+       </form>
+</div>
+</body>
+</html>

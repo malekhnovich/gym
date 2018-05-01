@@ -14,9 +14,6 @@ class AddEmployeeForm(FlaskForm):
     submitExternal = SubmitField("Add External Employee")
 
 
-
-
-#NOT SURE IF WE STILL NEED THIS FORM
 class DeleteEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     id = FloatField('id', validators=[DataRequired()])
@@ -39,3 +36,13 @@ class checkClassesForm(FlaskForm):
     classId = FloatField('classId', validators=[DataRequired()])
     roomCap = FloatField("roomCap", validators=[DataRequired()])
     submitCheckClasses = SubmitField("Go back")
+
+class addExerciseForm(FlaskForm):
+    exerciseName = StringField("name", validators = [DataRequired()])
+    exerciseDescription = StringField("description",validators = [DataRequired()])
+    submitAddExercise = SubmitField("Add exercise")
+
+class deleteExerciseForm(FlaskForm):
+    exerciseId = FloatField("id",validators = [DataRequired()])
+    exerciseName = StringField("name",validators = [DataRequired()])
+    submit = SubmitField("Delete Exercise")

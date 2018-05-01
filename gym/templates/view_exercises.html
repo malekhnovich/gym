@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exercises Available</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+</head>
+    {#  {% if session.logged_in %}#}
+{#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
+<div class="page">
+<h2>Exercises</h2><br>
+<p><a href="{{ url_for('get_classes') }}">Go back to classes</a></p>
+<table>
+  <tr>
+    <th>Exercise Name</th>
+      <th></th>
+    <th>Exercise Description</th>
+      <th></th>
+
+  </tr>
+  {% for exercise in exercises%}
+
+  <tr>
+    <td>{{exercise.name}}</td>
+      <th></th>
+    <td>{{exercise.description}}</td>
+    {% endfor %}
+
+    </tr>
+</table>
+<p><a href="{{ url_for('add_exercises') }}">Add exercise</a></p>
+<p><a href="{{ url_for('delete_exercise') }}">Delete exercise</a></p>
+</div>
+</body>
+</html>

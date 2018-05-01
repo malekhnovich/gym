@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Employee</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Deletion</title>
+</head>
+<body>
+    {#  {% if session.logged_in %}#}
+{#    <form action="{{ url_for('add_employee') }}" method=post class=add-entry>#}
+<div class="page">
+<h2>Delete Exercise</h2><br>
+<table>
+  <tr>
+    <th>Excercise ID</th>
+    <th>Exercise Name</th>
+  </tr>
+  {% for exercise in exercises %}
+  <tr>
+    <td>{{exercise.id}}</td>
+    <td>{{exercise.name}}</td>
+    <td>
+      <form action="{{ url_for('delete_exercise') }}" method = "post">
+        <input type="hidden" name="id" value="{{exercise.id}}">
+        {{form.submit()}}
+      </form>
+    </td>
+  <tr>
+  {% else %}
+    No exercises so far
+  {% endfor %}
+</table>
+</div>
+
+</html>
