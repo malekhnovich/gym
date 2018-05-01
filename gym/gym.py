@@ -8,7 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-from forms import deleteExerciseForm, addExerciseForm, AddEmployeeForm,DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
+from forms import deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
 from gym import app
 
 app.config.update(dict(
@@ -168,6 +168,24 @@ def add_employee():
     db.commit()
     #if the insert was successfull, idk how you'd check for that in Flask
     return redirect(url_for('get_employees'))
+
+@app.route('/edit_employee/<id>', methods=["POST", "GET"])
+def edit_employee(id):
+    form = EditEmployeeForm()
+
+    if request.method == "GET":
+        db = get_db()
+        cur =  db.execute( "select * from Instructor where id = ?", (id,))
+        employees = cur.fetchall()
+        employee = employees[0]
+        return render_template("edit_employee.html", form=form, employee=employee)
+
+    elif request.method == "POST":
+        name = form.name.data
+        db = get_db()
+        cur =  db.execute( "update Instructor set name = ? where id = ?", (name,id))
+        db.commit()
+        return 'Edit successful'
 
 @app.route('/delete_employee', methods=["POST", "GET"])
 def delete_employee():
