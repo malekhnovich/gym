@@ -143,16 +143,16 @@ def delete_employee():
     id = form.id.data
     id = int(str(id)[:1])
     print(id)
-    curId = db.execute("Select ft.name from FullTimeInstructor ft where id = ?",(id,))
+    # curId = db.execute("Select ft.name from FullTimeInstructor ft where id = ?",(id,))
 
-    cur = db.execute("Delete from Instructor where id = ?", id)
-    ids = [r[0] for r in curId.fetchall()]
+    cur = db.execute("Delete from Instructor where id = ?", (id,))
+    ids = [r[0] for r in cur.fetchall()]
     print(ids)
     if id in ids:
-        cur2 = db.execute("Delete from FullTimeInstructor where id = ?",id)
+        cur2 = db.execute("Delete from FullTimeInstructor where id = ?",(id,))
 
     else:
-        cur2 =db.execute("Delete from ExternalInstructor where id = ?",id)
+        cur2 =db.execute("Delete from ExternalInstructor where id = ?",(id,))
     db.commit()
     # employees = cur.fetchall()
     # # classes = cur.executemany(x)
