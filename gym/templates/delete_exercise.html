@@ -18,11 +18,13 @@
   <tr>
     <th>Excercise ID</th>
     <th>Exercise Name</th>
+      <th>Exercise Description</th>
   </tr>
   {% for exercise in exercises %}
   <tr>
     <td>{{exercise.id}}</td>
     <td>{{exercise.name}}</td>
+      <td>{{ exercise.description }}</td>
     <td>
       <form action="{{ url_for('delete_exercise') }}" method = "post">
         <input type="hidden" name="id" value="{{exercise.id}}">
@@ -33,6 +35,7 @@
   {% else %}
     No exercises so far
   {% endfor %}
+<p><a href="{{ url_for('view_exercises') }}">Go Back</a></p>
 </table>
 </div>
 

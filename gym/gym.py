@@ -230,21 +230,24 @@ def delete_exercise():
     db = get_db()
 
     if request.method == "GET":
-        cur = db.execute("select distinct e.id,e.name from exercise e")
+        cur = db.execute("select distinct e.id,e.name,e.description from exercise e")
         exercises = cur.fetchall()
         return render_template("delete_exercise.html", title="delete exercise", form=form, exercises=exercises)
 
-    id = form.exerciseId.data
+    id = request.form["id"]
     id = int(str(id)[:1])
-    print(id)
+    print("The id value is ",id)
     # curId = db.execute("Select ft.name from FullTimeInstructor ft where id = ?",(id,))
 
     # deleteExercise = db.execute("Delete from Exercise where id = ?", (id,))
-    getClasses = db.execute("Select id from Class where exerciseID = ?", (id,))
-    classesToDelete = getClasses.fetchall()
-    # deleteClass = db.execute("Delete from Class where exerciseID = ?",(id,))
-    # deleteEnrolled = db.execute("Delete from Enrolled where classId")
-
+    getClasses = db.execute("Select classId from Class where exerciseID = ?", (id,))
+    classesToDelete =[r[0] for r in getClasses.fetchall()]
+    print("classes to delete",classesToDelete)
+    for i in classesToDelete:
+        print("here")
+        deleteClass = db.execute("Delete from Class where exerciseID = ?",(id,))
+        deleteEnrolled = db.execute("Delete from Enrolled where classId = ?",(i,))
+    deleteNone = db.execute("Delete from exercise where name=?",(None,))
     db.commit()
     return redirect(url_for('view_exercises'))
 

@@ -43,6 +43,6 @@ class addExerciseForm(FlaskForm):
     submitAddExercise = SubmitField("Add exercise")
 
 class deleteExerciseForm(FlaskForm):
-    exerciseId = FloatField("id",validators = [DataRequired()])
+    exerciseId = FloatField("exerciseId",validators = [DataRequired()])
     exerciseName = StringField("name",validators = [DataRequired()])
     submit = SubmitField("Delete Exercise")
