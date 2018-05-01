@@ -1,12 +1,14 @@
 # all the imports
 import os
 import sqlite3
+from _elementtree import dump
+
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-from forms import AddEmployeeForm,DeleteEmployeeForm
+from forms import AddEmployeeForm,DeleteEmployeeForm,joinClassForm
 from gym import app
 
 app.config.update(dict(
@@ -55,20 +57,39 @@ def close_db(error):
 
 #___________routes______________________
 
-@app.route('/')
+@app.route('/', methods = ["POST","GET"])
 def get_classes():
-    #TODO:Pass in class id
-    classId = (1,)
+    form = joinClassForm()
+    print(form.classId)
+    print(request.data)
     db = get_db()
     c = db.cursor()
-    cur =  db.execute("select c.buildingName, c.startTime, i.id,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id")
+    cur =  db.execute("select e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id")
     classes = cur.fetchall()
-    # classes = cur.executemany(x)
-    curClassSize = db.execute("select count(*) from Enrolled e where classId =?",classId)
-    classSize = curClassSize.fetchone()[0]
-    print(classSize)
+
+    #curClassSize = db.execute("select count(*) from Enrolled e where classId =?",None)
+    #classSize = curClassSize.fetchone()[0]
+   # print(classSize)
     #keep point what you want to refer to it as in templates
-    return render_template("show_classes.html", classes =  classes)
+    return render_template("/sign_up.html", classes =  classes,form = request.data)
+
+@app.route('/sign_up', methods = ["POST","GET"])
+def sign_up():
+
+    db = get_db()
+    c = db.cursor()
+    class_selected = request.args.get('class', None)
+    print(class_selected)
+    # cur = db.execute("select c.buildingName, c.startTime, i.id,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id where classId =?",(classId,))
+    # curMemberCount = db.execute("Select Count(*) from Member")
+    # memberCount = curMemberCount.fetchall()
+    # memberCount = memberCount[0][0]
+    # print(memberCount)
+    # classDetails = cur.fetchall()
+    # print(classDetails)
+    # curIncrease = db.execute("insert into Enrolled values (?, ?)", (None, memberCount))
+    return "hi"
+    #return render_template("show_classes.html",classDetails=classDetails)
 
 
 @app.route('/show_employees')
@@ -120,13 +141,14 @@ def delete_employee():
         return render_template("delete_employee.html", title = "delete employee", form=form, employees=employees)
 
     id = form.id.data
-    #return id #for debugging
+    id = int(str(id)[:1])
+    print(id)
+    curId = db.execute("Select ft.name from FullTimeInstructor ft where id = ?",(id,))
 
-    curId = db.execute("Select ft.id from FullTimeInstructor ft")
-    cur = db.execute("Delete from instructor where id = ?", id)
-    ids = [r[0] for r in cur.fetchall()]
+    cur = db.execute("Delete from Instructor where id = ?", id)
+    ids = [r[0] for r in curId.fetchall()]
     print(ids)
-    if id in curId.fetchall():
+    if id in ids:
         cur2 = db.execute("Delete from FullTimeInstructor where id = ?",id)
 
     else:
