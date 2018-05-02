@@ -1,0 +1,20 @@
+<h2>Edit Class Information</h2>
+<form action="{{ url_for('editClass',classId=classChosen.classId) }}" method = "post">
+   <p>
+    ID: {{ class.classId }}
+   </p>
+    <p>
+        {{ form.name.label }}<br>
+        <input type="text" name="name" value="{{ classChosen.name }}">
+    </p>
+    <p>
+        {{ form.hours.label }}<br>
+        <input type="text" name="hours" value="{{ classChosen.hoursTaught }}">
+    </p>
+    <p>
+        {{ form.hourlyWage.label }}<br>
+        <input type="text" name="hourlywage" value="{{ classChosen.hourlywage }}">
+    </p>
+    <input type="hidden" name="type" value="External">
+    <p>{{ form.submit()}}</p>
+</form>

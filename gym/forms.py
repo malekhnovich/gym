@@ -58,3 +58,22 @@ class deleteExerciseForm(FlaskForm):
     exerciseId = FloatField("exerciseId",validators = [DataRequired()])
     exerciseName = StringField("name",validators = [DataRequired()])
     submit = SubmitField("Delete Exercise")
+
+
+class classViewForm(FlaskForm):
+    instructorId = FloatField('instructorId',validators = [DataRequired()])
+    classId  =FloatField('classId',validators=[DataRequired()])
+    roomId = FloatField('roomId',validators=[DataRequired()])
+    submitEdit = SubmitField("Edit Class")
+
+class editClassForm(FlaskForm):
+    startTime = StringField('startTime', validators=[DataRequired()])
+    instructorId = FloatField('instructorId',validators = [DataRequired()])
+    classId  =FloatField('classId',validators=[DataRequired()])
+    roomId = FloatField('roomId',validators=[DataRequired()])
+
+    duration = FloatField('duration',validators =[DataRequired()])
+    buildingName = StringField("buildingName",validators = [DataRequired()])
+    instructorName = StringField("instructorName",validators=[DataRequired()])
+    exerciseName = StringField("exerciseName",validators = [DataRequired(0)])
+    confirmEdit = SubmitField("Confirm Edit")

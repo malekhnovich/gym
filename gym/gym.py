@@ -1,15 +1,15 @@
 # all the imports
 import os
 import sqlite3
-from _elementtree import dump
+
 
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-from forms import deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditFullTimeEmployeeForm, EditExternalEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
-from gym import app
+from .forms import classViewForm, editClassForm, deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditFullTimeEmployeeForm, EditExternalEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
+from .gym import app
 
 app.config.update(dict(
     DATABASE="gym.db",
@@ -113,7 +113,7 @@ def sign_up():
     if(enrolled>capacity):
         return render_template("/show_classes.html",title="no space",classes=classes,capacity = capacity,enrolled=enrolled,backForm=goBackForm,form=form)
     else:
-        nextEnrolled=enrolled+1
+        nextEnrolled = enrolled+1
         db.execute("insert into Enrolled values(?,?)",(nextEnrolled,classId))
         db.commit()
         return render_template('/show_classes.html', title="main", classes=classes, capacity = capacity,enrolled =enrolled,form=form,backForm=goBackForm)
@@ -291,12 +291,50 @@ def delete_exercise():
     db.commit()
     return redirect(url_for('view_exercises'))
 
+#where employees can view classes
+@app.route("/class_view")
+def class_view():
+    db = get_db()
+    form = classViewForm()
+    curClasses = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,c.buildingName,c.roomID, e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name, r.capacity as roomCap, r.roomID from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID ")
+# classes = cur.fetchall()
+    classes = curClasses.fetchall()
+    return render_template("class_view.html",classes=classes,form=form)
 
+
+@app.route("/edit_class/<classId>",methods = ['POST','GET'])
+def editClass(classId):
+    form = editClassForm()
+    instructorId = request.form["instructorId"]
+    print("The value of id is ",instructorId)
+    if request.method =="GET" or request.method=="POST":
+        print("here")
+        db = get_db()
+        curClass = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,c.buildingName,c.roomID,e.name,e.description from Class c,Exercise e where c.exerciseID=e.id and c.classId = ?",(classId))
+        classChosen = curClass.fetchall()
+        print(classChosen)
+        startTime = request.form['startTime']
+        print(startTime)
+        duration = request.form['duration']
+        buildingName = request.form['buildingName']
+        roomId = request.form['roomId']
+        instructorName = request.form['instructorName']
+        exerciseName = request.form['exerciseName']
+        print("hello")
+        db = get_db()
+        cur = db.execute("update class set startTime = ?,duration =?,buildingName =?,roomID =? where classId = ?",(startTime,duration,buildingName,roomID,classId))
+        cur2 =db.execute("update Instructor set name = ? where id = ?",(instructorName,instructorId))
+        cur3 = db.execute("update Room set buildingName = ?,roomID=?",(buildingName,roomID))
+        db.commit()
+        return render_template("edit_class.html",form=form,classChosen = classChosen[0])
+    else:
+        return "invalid attempt at editing"
 
 
 @app.route('/payroll')
 def view_payroll():
     db = get_db()
+
     # 10% federal tax, 5% state tax and 3% for other taxes
     externalMonthlyTaxCur = db.execute("Select distinct ei.id,ei.name,ei.hoursTaught,ei.hourlywage,((ei.hourlywage*ei.hoursTaught)*(0.10)+(ei.hourlywage*ei.hoursTaught)*(0.05)+(ei.hourlywage*ei.hoursTaught)*(0.03)) as tax, ei.hourlywage*ei.hoursTaught as salary from ExternalInstructor ei")
     eemTax = externalMonthlyTaxCur.fetchall()
