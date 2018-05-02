@@ -13,9 +13,18 @@ class AddEmployeeForm(FlaskForm):
     submitFulltime = SubmitField("Add Fulltime Employee")
     submitExternal = SubmitField("Add External Employee")
 
-class EditEmployeeForm(FlaskForm):
+class EditFullTimeEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
-    submit = SubmitField("Edit Employee")
+    type = StringField('type',validators = [DataRequired()])
+    salary = FloatField('salary',validators = [DataRequired()])
+    submit = SubmitField("Edit FullTime Employee")
+
+class EditExternalEmployeeForm(FlaskForm):
+    name = StringField('name', validators=[DataRequired()])
+    type = StringField('type',validators = [DataRequired()])
+    hourlyWage = FloatField('hourlyWage', validators=[[DataRequired()]])
+    hours  = FloatField('hours',validators = [[DataRequired()]])
+    submit = SubmitField("Edit External Employee")
 
 class DeleteEmployeeForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
