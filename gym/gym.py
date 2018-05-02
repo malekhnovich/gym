@@ -257,10 +257,10 @@ def add_exercises():
     name = form.exerciseName.data
     description = form.exerciseDescription.data
     db = get_db()
-    curAddExercise = db.execute("insert into exercise VALUES (?,?,?)",(None,name,description))
+    curAddExercise = db.execute("insert into exercise (name, description) VALUES (?,?)",(name,description))
 
     curAddExercise.fetchall()
-    curdeleteNone = db.execute("Delete from exercise where name =?",None)
+    #curdeleteNone = db.execute("Delete from exercise where name =?",None)
     db.commit()
     return redirect('view_exercises')
 
