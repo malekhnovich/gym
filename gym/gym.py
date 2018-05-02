@@ -8,7 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-from forms import deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
+from forms import deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditFullTimeEmployeeForm, EditExternalEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
 from gym import app
 
 app.config.update(dict(
@@ -171,21 +171,43 @@ def add_employee():
 
 @app.route('/edit_employee/<id>', methods=["POST", "GET"])
 def edit_employee(id):
-    form = EditEmployeeForm()
+    formF = EditFullTimeEmployeeForm()
+    formE = EditExternalEmployeeForm()
 
     if request.method == "GET":
         db = get_db()
-        cur =  db.execute( "select * from Instructor where id = ?", (id,))
-        employees = cur.fetchall()
-        employee = employees[0]
-        return render_template("edit_employee.html", form=form, employee=employee)
+        cur = db.execute("select * from Instructor i, FullTimeInstructor f where i.id = f.id and i.id = ?", (id))
+        employeesF = cur.fetchall()
+        cur2 = db.execute("select * from Instructor i, ExternalInstructor f where i.id = f.id and i.id = ?", (id))
+        employeesE = cur2.fetchall()
+
+        if len(employeesF) == 1: #we know it is a full timer
+            return render_template("edit_fulltime_employee.html", form=formF, employee=employeesF[0])
+        elif len(employeesE) == 1: #we know it is an external instructor
+            return render_template("edit_external_employee.html", form=formE, employee=employeesE[0])
+        else:
+            return "Not an employee"
 
     elif request.method == "POST":
-        name = form.name.data
-        db = get_db()
-        cur =  db.execute( "update Instructor set name = ? where id = ?", (name,id))
-        db.commit()
-        return 'Edit successful'
+        if request.form['type'] == 'FullTime':
+            name = request.form['name']
+            salary = request.form['salary']
+            db = get_db()
+            cur =  db.execute( "update Instructor set name = ? where id = ?", (name,id))
+            cur =  db.execute( "update FullTimeInstructor set salary = ? where id = ?", (salary,id))
+            db.commit()
+            return "fulltime edit successful"
+        elif request.form['type'] == 'External':
+            name = request.form['name']
+            hoursTaught = request.form['hours']
+            hourlyWage = request.form['hourlywage']
+            db = get_db()
+            cur =  db.execute( "update Instructor set name = ? where id = ?", (name,id))
+            cur =  db.execute( "update ExternalInstructor set hoursTaught = ?, hourlywage = ? where id = ?", (hoursTaught,hourlyWage,id))
+            db.commit()
+            return "external edit successful"
+        else:
+            return 'Invalid employee edit'
 
 @app.route('/delete_employee', methods=["POST", "GET"])
 def delete_employee():
