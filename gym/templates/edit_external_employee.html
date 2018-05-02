@@ -1,0 +1,20 @@
+<h2>Edit External Employee</h2>
+<form action="{{ url_for('edit_employee',id=employee.id) }}" method = "post">
+   <p>
+    ID: {{ employee.id }}
+   </p>
+    <p>
+        {{ form.name.label }}<br>
+        <input type="text" name="name" value="{{ employee.name }}">
+    </p>
+    <p>
+        {{ form.hours.label }}<br>
+        <input type="text" name="hours" value="{{ employee.hoursTaught }}">
+    </p>
+    <p>
+        {{ form.hourlyWage.label }}<br>
+        <input type="text" name="hourlywage" value="{{ employee.hourlywage }}">
+    </p>
+    <input type="hidden" name="type" value="External">
+    <p>{{ form.submit()}}</p>
+</form>

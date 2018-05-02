@@ -1,0 +1,16 @@
+<h2>Edit Fulltime Employee</h2>
+<form action="{{ url_for('edit_employee',id=employee.id) }}" method = "post">
+   <p>
+    ID: {{ employee.id }}
+   </p>
+    <p>
+        {{ form.name.label }}<br>
+        <input type="text" name="name" value="{{ employee.name }}">
+    </p>
+    <p>
+        {{ form.salary.label }}<br>
+        <input type="text" name="salary" value="{{ employee.salary }}">
+    </p>
+    <input type="hidden" name="type" value="FullTime">
+    <p>{{ form.submit()}}</p>
+</form>
