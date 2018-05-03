@@ -45,6 +45,7 @@
             <input type="hidden" name = "roomCap" value = "{{ class.roomCap }}">
             {{backForm.submitCheckClasses()}}
         </form>
+
     {% endif %}
     </td>
   </tr>
@@ -52,9 +53,33 @@
       No classes so far
   {% endfor %}
 
-{% endblock %}
+
 </table>
 
-</div>
+{% for class in classes %}
+  {% if (capacity-enrolled==0) %}
+    <br>
+    <h2>Check out these classes instead</h2>
+    <table>
+      <tr>
+        <th>Start Time</th>
+        <th>Exercise</th>
+        <th>Instructor</th>
+        <th>Spots available</th>
+      </tr>
+    {% for rc in recommendedClasses %}
+      <tr>
+        <td>{{rc.startTime}}</td>
+        <td>{{rc.exerciseName}}</td>
+        <td>{{rc.instructorName}}</td>
+        <td>{{rc.capacity-rc.enrolled}}</td>
+      </tr>
+    {% endfor %}
+    <table>
+  {% endif %}
+{% endfor %}
+
+  </div>
  </body>
 </html>
+{% endblock %}

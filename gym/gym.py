@@ -112,7 +112,9 @@ def sign_up():
     # print("the capacity of this room is ",roomCap)
     print("the number of enrolled are",getEnrolled)
     if(enrolled>=capacity):
-        return render_template("/show_classes.html",title="no space",classes=classes,capacity = capacity,enrolled=enrolled,backForm=goBackForm,form=form)
+        recommendedCur = db.execute("select e.name as exerciseName, c.startTime, i.name as instructorName ,r.capacity, (select count(*) from Enrolled where classId = c.classId ) as enrolled from Class c, Exercise e, Instructor i, Room r where c.exerciseID = e.id and c.instructorID = i.id and c.buildingName = r.buildingName and c.roomID = r.roomID and r.capacity > enrolled order by enrolled asc limit 3")
+        recommended = recommendedCur.fetchall()
+        return render_template("/show_classes.html",title="no space",classes=classes, recommendedClasses = recommended ,capacity = capacity,enrolled=enrolled,backForm=goBackForm,form=form)
     else:
         nextEnrolled = enrolled+1
         db.execute("insert into Enrolled values(?,?)",(nextEnrolled,classId))
