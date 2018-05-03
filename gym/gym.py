@@ -94,6 +94,7 @@ def sign_up():
     instructorId = form.instructorId.data
     classId = form.classId.data
     print("instructorid",instructorId,"class id:",classId)
+
     db = get_db()
     c = db.cursor()
     getEnrolledCur = db.execute("select count(*) from Enrolled as numberEnrolled where classId = ?", (classId,))
@@ -110,7 +111,7 @@ def sign_up():
 
     # print("the capacity of this room is ",roomCap)
     print("the number of enrolled are",getEnrolled)
-    if(enrolled>capacity):
+    if(enrolled>=capacity):
         return render_template("/show_classes.html",title="no space",classes=classes,capacity = capacity,enrolled=enrolled,backForm=goBackForm,form=form)
     else:
         nextEnrolled = enrolled+1
