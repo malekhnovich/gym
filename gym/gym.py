@@ -8,7 +8,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, \
 
 app = Flask(__name__) # app
 app.config.from_object(__name__) # gym config coming from here
-from .forms import classViewForm, editClassForm, deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditFullTimeEmployeeForm, EditExternalEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
+from .forms import classViewForm, editClassForm,deleteClassForm, deleteExerciseForm, addExerciseForm, AddEmployeeForm, EditFullTimeEmployeeForm, EditExternalEmployeeForm, DeleteEmployeeForm,SeeClassForm,JoinClassForm,checkClassesForm
 from .gym import app
 
 app.config.update(dict(
@@ -305,34 +305,52 @@ def class_view():
     return render_template("class_view.html",classes=classes,form=form)
 
 
-@app.route("/edit_class/<classId>",methods = ['POST','GET'])
-def editClass(classId):
-    form = editClassForm()
-    instructorId = request.form["instructorId"]
+
+
+@app.route("/edit_class",methods = ['POST','GET'])
+def editClass():
+    classId = request.form.get('classId')
+    print("the class id is ")
+    oldStartTime = request.form.get('oldStartTime')
+    newStartTime = request.form.get('newStartTime')
+    newClassDuration  =request.form.get('newClassDuration')
+    newBuildingName = request.form.get("newBuildingName")
+    newRoomNumber = request.form.get("newRoomNumber")
+    #newRoomNumber = int(newRoomNumber)
+    newInstructorName = request.form.get("newInstructorName")
+    newClassDuration = newClassDuration
+    oldClassDescription = request.form.get('')
+    instructorId = request.form.get('instructorId')
     print("The value of id is ",instructorId)
     if request.method =="GET" or request.method=="POST":
         print("here")
         db = get_db()
-        curClass = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,c.buildingName,c.roomID,e.name,e.description from Class c,Exercise e where c.exerciseID=e.id and c.classId = ?",(classId))
-        classChosen = curClass.fetchall()
-        print(classChosen)
-        startTime = request.form['startTime']
-        print(startTime)
-        duration = request.form['duration']
-        buildingName = request.form['buildingName']
-        roomId = request.form['roomId']
-        instructorName = request.form['instructorName']
-        exerciseName = request.form['exerciseName']
-        print("hello")
-        db = get_db()
-        cur = db.execute("update class set startTime = ?,duration =?,buildingName =?,roomID =? where classId = ?",(startTime,duration,buildingName,roomID,classId))
-        cur2 =db.execute("update Instructor set name = ? where id = ?",(instructorName,instructorId))
-        cur3 = db.execute("update Room set buildingName = ?,roomID=?",(buildingName,roomID))
+        cur = db.execute("update class set startTime = ?,duration =?,buildingName =?,roomID =? where classId = ?",(newStartTime,newClassDuration,newBuildingName,newRoomNumber,classId))
+        cur2 =db.execute("update Instructor set name = ? where id = ?",(newInstructorName,instructorId))
+        cur3 = db.execute("update Room set roomID=?",(newRoomNumber,))
         db.commit()
-        return render_template("edit_class.html",form=form,classChosen = classChosen[0])
+        return redirect("/class_view")
     else:
         return "invalid attempt at editing"
 
+
+
+
+@app.route('/delete_class',methods = ["POST","GET"])
+def delete_class():
+    form=deleteClassForm()
+    db = get_db()
+    cur = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,c.buildingName,c.roomID, e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name, r.capacity as roomCap, r.roomID from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID")
+    DeleteClass = cur.fetchall()
+
+    instructorId = request.form.get('instructorId')
+    classId = request.form.get('classId')
+    #id=int(str(id)[:1])
+    print("id value is",classId)
+
+    cur = db.execute("Delete from Class where classId = ?",(classId,))
+    db.commit()
+    return redirect(('/class_view'))
 
 @app.route('/payroll')
 def view_payroll():

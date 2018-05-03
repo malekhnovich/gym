@@ -1,5 +1,6 @@
 MANIFEST.in
 gym/__init__.py
+gym/forms.py
 gym/gym.py
 gym/schema.sql
 gym.egg-info/PKG-INFO
@@ -8,5 +9,18 @@ gym.egg-info/dependency_links.txt
 gym.egg-info/requires.txt
 gym.egg-info/top_level.txt
 gym/static/style.css
+gym/templates/add_employee.html
+gym/templates/add_exercises.html
+gym/templates/class_view.html
+gym/templates/delete_employee.html
+gym/templates/delete_exercise.html
+gym/templates/edit_class.html
+gym/templates/edit_external_employee.html
+gym/templates/edit_fulltime_employee.html
 gym/templates/layout.html
-gym/templates/show_members.html
+gym/templates/show_classes.html
+gym/templates/show_employees.html
+gym/templates/sign_up.html
+gym/templates/view_classes.html
+gym/templates/view_exercises.html
+gym/templates/view_payroll.html

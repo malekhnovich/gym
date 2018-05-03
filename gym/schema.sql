@@ -25,7 +25,7 @@ create table Exercise(id INTEGER  PRIMARY KEY AUTOINCREMENT, name varchar(20), d
 
 
 
-create table Room(buildingName varchar(20) NOT NULL , roomID int  NOT NULL, capacity int,PRIMARY KEY(buildingName,roomID));
+create table Room(buildingName varchar(20) NOT NULL , roomID int  NOT NULL, capacity int, PRIMARY KEY(buildingName,roomID));
 
 create table Instructor(id INTEGER  PRIMARY KEY AUTOINCREMENT, name varchar(20));
 

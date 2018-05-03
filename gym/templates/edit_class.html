@@ -9,12 +9,12 @@
     </p>
     <p>
         {{ form.hours.label }}<br>
-        <input type="text" name="hours" value="{{ classChosen.hoursTaught }}">
+        <input type="text" name="hours" value="{{ classChosen.startTime }}">
     </p>
     <p>
         {{ form.hourlyWage.label }}<br>
-        <input type="text" name="hourlywage" value="{{ classChosen.hourlywage }}">
+        <input type="text" name="hourlywage" value="{{ classChosen.duration }}">
     </p>
-    <input type="hidden" name="type" value="External">
+    <input type="hidden" name="type" value="classChosen.classId">
     <p>{{ form.submit()}}</p>
 </form>

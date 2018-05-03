@@ -64,7 +64,8 @@ class classViewForm(FlaskForm):
     instructorId = FloatField('instructorId',validators = [DataRequired()])
     classId  =FloatField('classId',validators=[DataRequired()])
     roomId = FloatField('roomId',validators=[DataRequired()])
-    submitEdit = SubmitField("Edit Class")
+    submitEdit = SubmitField("Edit this Class")
+    submitDelete = SubmitField("Delete this  Class")
 
 class editClassForm(FlaskForm):
     startTime = StringField('startTime', validators=[DataRequired()])
@@ -77,3 +78,10 @@ class editClassForm(FlaskForm):
     instructorName = StringField("instructorName",validators=[DataRequired()])
     exerciseName = StringField("exerciseName",validators = [DataRequired(0)])
     confirmEdit = SubmitField("Confirm Edit")
+
+
+
+
+class deleteClassForm(FlaskForm):
+    classId = StringField('classId',validators = [DataRequired()])
+    submitDelete = SubmitField("DELETE")

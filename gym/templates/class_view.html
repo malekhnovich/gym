@@ -2,14 +2,34 @@
 {% block body %}
     <html>
 <head>
+  Employees can edit classes here
     <meta charset="UTF-8">
     <title>Classes</title>
     <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 </head>
     <body>
-    <div class="page">
-<p><a href="{{ url_for('get_classes') }}">Go back to classes</a></p>
 
+<p><a href="{{ url_for('get_classes') }}">Go back to classes</a></p>
+<form method = "POST" action = "/">
+<table>
+  <tr>
+    <h6>Class Name</h5>
+    <input type = "text" name = "Class Name">
+    <h6>Instructor Name</h5>
+    <input type = "text" name = "Instructor Name">
+    <h6>Start Time</h5>
+    <input type = "text" name = "Start Time">
+    <h6>Duration</h5>
+    <input type = "text" name = "Duration">
+    <h6> Excercise Name</h5>
+    <input type = "text" name = "Excercise Name">
+    <h6>Building Name</h5>
+    <input type = "text" name = "Building Name">
+    <h6>Room Number </h5>
+    <input type = "text" name = "Room Number">
+    <input type = "submit" value = "Add Class">
+  </form>
+  <div class="page">
     <table>
   <tr>
     <th>Start Time</th>
@@ -17,25 +37,49 @@
       <th>Description</th>
     <th>Instructor</th>
       <th>Building Name</th>
-
+      <th>Room Number
   </tr>
   {% for class in classes %}
-  <tr>
-      <td>{{class.startTime}}</td>
-      <td>{{ class.exerciseName }}</td>
-      <td>{{class.description}}</td>
-      <td>{{ class.instructorName }}</td>
-       <td>{{ class.buildingName }}</td>
-      <td>{{ class.roomId }}</td>
-    <td><form action ="{{ url_for('editClass', classId = class.classId) }}" method = "post">
-            <input type = "hidden" name = "instructorId" value ="{{ class.instructorId }}">
-            {{form.submitEdit()}}
-        </form>
+
+    <td><input type=  "hidden" value = "{{class.InstructorId}}" name = "instructorId"></td>
+    <td><input type = "hidden" value  = "{{class.classId}}" name = "classId"></td>
+    <td><input type = "hidden" value = "{{class.startTime}}"name = "oldStartTime"></td>
+    <td><input type = "time" value = "{{class.startTime}}" name = "newStartTime"></td>
+    <td><input type = "hidden" value = "{{class.description}}" name= "oldClassDescription"></td>
+    <td><input type = "text" value = "{{class.description}}" name = "newClassDescription"></td>
+    <td><input type = "hidden"value = "{{class.instructorName}}" name = "oldInstructorName"></td>
+    <td><input type = "text"value = "{{class.instructorName}}" name = "newInstructorName"></td>
+    <td>{{class.buildingName}}</td>
+    <td><input type = "text"value = "{{class.roomID}}" name = "newRoomNumber"></td>
+    <td><input type = "hidden"value = "{{class.duration}}" name="newDuration"></td>
+<td>
+    <form method="POST" action = "./edit_class">
+      <input type ="hidden" value = "{{class.classId}}">
+      <input type = "hidden" value = "{{class.InstructorId}}">
+      <input type = "hidden" value = "{{class.roomID}}">
+
+      <input type = "submit" value = "Update">
+    </form>
     </td>
+
+      </form></td>
+      <td><form method = "POST" action = './delete_class'>
+        <input type = "hidden" value = "{{class.classId}}" name = "classId">
+        <input type = "hidden" value = "{{class.roomId}}" name = "newRoomNumber">
+        <input type = "submit" value = "Delete">
+      </form>
+      </form></td>
+  </td>
+
+
   </tr>
     {% endfor %}
+
         {% endblock %}
     </table>
+
+
     </div>
     </body>
+
 </html>
