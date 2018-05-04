@@ -10,29 +10,36 @@
     <body>
 
 <p><a href="{{ url_for('get_classes') }}">Go back to classes</a></p>
-<form method = "POST" action = "/">
+<form method = "POST" action = "./add_class">
 <table>
   <tr>
-    <h6>Class Name</h5>
-    <input type = "text" name = "Class Name">
-    <h6>Instructor Name</h5>
-    <input type = "text" name = "Instructor Name">
+    <h6>Instructor Id</h5>
+    <input type = "text" name = "instructorID">
     <h6>Start Time</h5>
-    <input type = "text" name = "Start Time">
+    <input type = "text" name = "startTime">
+    <h6>Exercise Id </h6>
+    <input type ="text" name= "exerciseId">
     <h6>Duration</h5>
-    <input type = "text" name = "Duration">
-    <h6> Excercise Name</h5>
-    <input type = "text" name = "Excercise Name">
+    <input type = "text" name = "newClassDuration">
+
+    <!-- <h6> Excercise Name</h5>
+    <input type = "text" name = "exerciseName"> -->
+    <h6> Exercise Description</h5>
+      <input type="text" name="ExerciseDescription">
     <h6>Building Name</h5>
-    <input type = "text" name = "Building Name">
+    <input type = "text" name = "newBuildingName">
     <h6>Room Number </h5>
-    <input type = "text" name = "Room Number">
+    <input type = "text" name = "newRoomNumber">
+    <h6>Capacity </h5>
+      <input type="text" name = "newCapacity">
+
     <input type = "submit" value = "Add Class">
   </form>
   <div class="page">
     <table>
   <tr>
     <th>Start Time</th>
+    <th>Duration(Hours)</th>
     <th>Exercise</th>
       <th>Description</th>
     <th>Instructor</th>
@@ -40,35 +47,41 @@
       <th>Room Number
   </tr>
   {% for class in classes %}
+  <form method="POST" action = "./edit_class">
 
-    <td><input type=  "hidden" value = "{{class.InstructorId}}" name = "instructorId"></td>
-    <td><input type = "hidden" value  = "{{class.classId}}" name = "classId"></td>
-    <td><input type = "hidden" value = "{{class.startTime}}"name = "oldStartTime"></td>
-    <td><input type = "time" value = "{{class.startTime}}" name = "newStartTime"></td>
-    <td><input type = "hidden" value = "{{class.description}}" name= "oldClassDescription"></td>
-    <td><input type = "text" value = "{{class.description}}" name = "newClassDescription"></td>
-    <td><input type = "hidden"value = "{{class.instructorName}}" name = "oldInstructorName"></td>
+  <input type = "hidden" name="oldStartTime" value="{{class.startTime}}"/>
+  <input type="hidden" name = "oldClassDuration" value="{{class.duration}}"/>
+  <input type= "hidden" name ="oldExcerciseName" value = "{{class.excerciseName}}"/>
+  <input type = "hidden" name="oldClassDescription" value="{{class.description}}"/>
+  <input type= "hidden" name ="oldInstructorName" value = "{{class.instructorName}}"/>
+  <input type = "hidden" name="oldBuildingName" value="{{class.buildingName}}"/>
+  <input type= "hidden" name ="oldRoomNumber" value = "{{class.roomId}}"/>
+  <input type = "hidden" name="oldClassDuration"value="{{class.duration}}"/>
+  <input type = "hidden" name="oldExerciseDescription" value="{{class.description}}"/>
+  <input type = "hidden" name="exceriseId" value="{{class.exerciseId}}"/>
+  <input type = "hidden" name="instructorId"value = "{{class.instructorId}}"/>
+  <td><input type = "text" value = "{{class.startTime}}" name="newStartTime"></td>
+  <td><input type="text"value="{{class.duration}}" name="newClassDuration"></td>
+  <td><input type = "text" value = "{{class.exerciseName}}" name="newExerciseName"></td>
+    <td><input type = "text" value = "{{class.description}}" name="newExerciseDescription"></td>
     <td><input type = "text"value = "{{class.instructorName}}" name = "newInstructorName"></td>
-    <td>{{class.buildingName}}</td>
+    <td><input type = "text" value = "{{class.buildingName}}" name = "newBuildingName"></td>
     <td><input type = "text"value = "{{class.roomID}}" name = "newRoomNumber"></td>
-    <td><input type = "hidden"value = "{{class.duration}}" name="newDuration"></td>
 <td>
-    <form method="POST" action = "./edit_class">
-      <input type ="hidden" value = "{{class.classId}}">
-      <input type = "hidden" value = "{{class.InstructorId}}">
-      <input type = "hidden" value = "{{class.roomID}}">
+      <input type ="hidden" name="classId" value = "{{class.classId}}">
 
       <input type = "submit" value = "Update">
     </form>
     </td>
-
-      </form></td>
+</td>
       <td><form method = "POST" action = './delete_class'>
         <input type = "hidden" value = "{{class.classId}}" name = "classId">
-        <input type = "hidden" value = "{{class.roomId}}" name = "newRoomNumber">
+        <input type = "hidden" value = "{{class.roomId}}" name = "roomNumber">
+        <input type = "hidden"value="{{class.buildingName}}" name="buildingName">
+        <input type="hidden"value = "{{class.instructorId}}" name="instructorId">
         <input type = "submit" value = "Delete">
       </form>
-      </form></td>
+      </td>
   </td>
 
 

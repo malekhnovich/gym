@@ -1,7 +1,7 @@
 # all the imports
 import os
 import sqlite3
-
+from pprint import pprint
 
 from flask import Flask, request, session, g, redirect, url_for, abort, \
      render_template, flash
@@ -295,39 +295,102 @@ def delete_exercise():
     return redirect(url_for('view_exercises'))
 
 #where employees can view classes
-@app.route("/class_view")
+@app.route("/class_view",methods = ['GET','POST'])
 def class_view():
     db = get_db()
     form = classViewForm()
-    curClasses = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,c.buildingName,c.roomID, e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name, r.capacity as roomCap, r.roomID from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID ")
+    curClasses = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID ")
 # classes = cur.fetchall()
     classes = curClasses.fetchall()
+    pprint("hELFLODOSFOSDOFSOFOSD")
     return render_template("class_view.html",classes=classes,form=form)
 
 
+@app.route("/add_class", methods = ['POST','GET'])
+def add_class():
+    db = get_db()
+    print("hereeeedaedadede")
+    pprint(request.form)
+    lastInstructor = db.execute("select count(*) from Instructor as numberInstructor")
+    lastInstructor = lastInstructor.fetchone()
+    InstructorRow = lastInstructor[0]
+    nextInstructorId = InstructorRow+1
+    lastExercise = db.execute("select count(*) from Exercise as numberExercises")
+    exerciseRow = lastExercise.fetchone()
+    nextExcerciseId = exerciseRow[0]
+    nextExcerciseId = nextExcerciseId+1
+    exerciseId = request.form.get("exerciseId")
+    #instructorName = request.form.get("instructorName")
+    instructorID = request.form.get("instructorID")
+    print("The instructor id is ",instructorID)
+    startTime = request.form.get("startTime")
+    duration=request.form.get("duration")
+    exerciseName = request.form.get("exerciseName")
+    exerciseDescription = request.form.get("exerciseDescription")
+    newBuildingName  = request.form.get("newBuildingName")
+    newRoomNumber  = request.form.get("newRoomNumber")
+    newCapacity = request.form.get("newCapacity")
+    newClassDuration = request.form.get("newClassDuration")
 
+    lastClass = db.execute("select count(*) from Class as numberInstructor")
+
+    cur = db.execute("insert into Class (classId,instructorID,startTime,duration, exerciseID, buildingName,roomID) Values(?,?,?,?,?,?,?)",(None,instructorID,startTime,newClassDuration,exerciseId,newBuildingName,newRoomNumber))
+    cur2 =db.execute("insert into Room(buildingName,roomID, capacity) Values(?,?,?)",(newBuildingName,newRoomNumber, newCapacity))
+
+    db.commit()
+    return redirect('/class_view')
 
 @app.route("/edit_class",methods = ['POST','GET'])
 def editClass():
+    #pprint("XASAFLKDANFSKFNAKKANSNDSNADSLKADSK")
+    if request.form:
+        pprint(request.form)
     classId = request.form.get('classId')
-    print("the class id is ")
-    oldStartTime = request.form.get('oldStartTime')
     newStartTime = request.form.get('newStartTime')
+    if newStartTime==None:
+        oldStartTime = request.form.get('oldStartTime')
+        newStartTime = oldStartTime
     newClassDuration  =request.form.get('newClassDuration')
+    if newClassDuration==None:
+        oldClassDuration = request.form.get('oldClassDuration')
+        newClassDuration= oldClassDuration
+
     newBuildingName = request.form.get("newBuildingName")
+    oldBuildingName = request.form.get("oldBuildingName")
+    if newBuildingName==None:
+        oldBuildingName = request.form.get("oldBuildingName")
+        newBuildingName = oldBuildingName
+
     newRoomNumber = request.form.get("newRoomNumber")
-    #newRoomNumber = int(newRoomNumber)
+    oldRoomNumber = request.form.get("oldRoomNumber")
+    if newRoomNumber==None:
+        pprint("ejpiapiajpapjpsdjpdsjasd")
+        oldRoomNumber=request.form.get("oldRoomNumber")
+        newRoomNumber=oldRoomNumber
+    pprint(newRoomNumber)
     newInstructorName = request.form.get("newInstructorName")
+    if newInstructorName==None:
+        oldInstructorName=request.form.get("oldInstructorName")
+        newInstructorName=oldInstructorName
     newClassDuration = newClassDuration
-    oldClassDescription = request.form.get('')
+    newExerciseDescription=request.form.get("newExerciseDescription")
+    if newExerciseDescription==None:
+        newExerciseDescription=request.form.get("oldExerciseDescription")
+        newExerciseDescription=oldExerciseDescription
+    newExerciseName=request.form.get("newExerciseName")
+    if newExerciseName==None:
+        oldExerciseName=request.form.get("oldExerciseName")
+        newExerciseName=oldExerciseName
+    exerciseId = request.form.get("exerciseId")
     instructorId = request.form.get('instructorId')
     print("The value of id is ",instructorId)
     if request.method =="GET" or request.method=="POST":
         print("here")
         db = get_db()
-        cur = db.execute("update class set startTime = ?,duration =?,buildingName =?,roomID =? where classId = ?",(newStartTime,newClassDuration,newBuildingName,newRoomNumber,classId))
+        cur = db.execute("update Class set startTime = ?, instructorID =?, duration =?,buildingName =?,roomID =? where classId = ?",(newStartTime,instructorId,newClassDuration,newBuildingName,newRoomNumber,classId))
         cur2 =db.execute("update Instructor set name = ? where id = ?",(newInstructorName,instructorId))
-        cur3 = db.execute("update Room set roomID=?",(newRoomNumber,))
+        cur3 = db.execute("update Room set roomID=?,buildingName=? where roomId = ? and buildingName = ?",(newRoomNumber,newBuildingName,oldRoomNumber,oldBuildingName))
+        cur4 = db.execute("update Exercise set name=?,description=? where id = ?",(newExerciseName, newExerciseDescription,exerciseId))
         db.commit()
         return redirect("/class_view")
     else:
@@ -338,17 +401,16 @@ def editClass():
 
 @app.route('/delete_class',methods = ["POST","GET"])
 def delete_class():
-    form=deleteClassForm()
+    pprint(request.form)
     db = get_db()
     cur = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,c.buildingName,c.roomID, e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name, r.capacity as roomCap, r.roomID from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID")
     DeleteClass = cur.fetchall()
-
-    instructorId = request.form.get('instructorId')
     classId = request.form.get('classId')
+    instructorId = request.form.get('instructorId')
     #id=int(str(id)[:1])
     print("id value is",classId)
 
-    cur = db.execute("Delete from Class where classId = ?",(classId,))
+    cur = db.execute("Delete from Class  where classId = ? and instructorId = ?",(classId,instructorId))
     db.commit()
     return redirect(('/class_view'))
 
