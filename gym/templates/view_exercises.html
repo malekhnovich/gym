@@ -19,11 +19,14 @@
 
   </tr>
   {% for exercise in exercises%}
-
+  <form method = "POST"action = "./edit_exercises">
   <tr>
-    <td>{{exercise.name}}</td>
+    <td><input type="text" name="exerciseName"value="{{exercise.name}}">
       <th></th>
-    <td>{{exercise.description}}</td>
+    <td><input type="text"name="exerciseDescription"value="{{exercise.description}}"></td>
+    <input type="hidden"name="exerciseId"value="{{exercise.id}}">
+    <td><input type = "submit" value="edit"></td>
+  </form>
     {% endfor %}
 
     </tr>

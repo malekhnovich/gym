@@ -246,9 +246,23 @@ def delete_employee():
 @app.route('/view_exercises')
 def view_exercises():
     db = get_db()
-    curExercise = db.execute("Select e.name,e.description from exercise e")
+    curExercise = db.execute("Select e.name,e.description,e.id from exercise e")
     exercises = curExercise.fetchall()
     return render_template('view_exercises.html',exercises=exercises)
+
+@app.route("/edit_exercises",methods = ['POST','GET'])
+def editExercise():
+    if request.form:
+        pprint(request.form)
+    exerciseName = request.form.get("exerciseName")
+    exerciseDescription = request.form.get("exerciseDescription")
+    exerciseId = request.form.get("exerciseId")
+    db = get_db()
+    cur = db.execute("Update Exercise set name=?,description=? where id = ?",(exerciseName,exerciseDescription,exerciseId))
+    db.commit()
+    return redirect('view_exercises')
+
+
 
 @app.route('/add_exercises',methods=["POST", "GET"])
 def add_exercises():
