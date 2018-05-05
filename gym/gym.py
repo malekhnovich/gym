@@ -201,7 +201,7 @@ def edit_employee(id):
             cur =  db.execute( "update Instructor set name = ? where id = ?", (name,id))
             cur =  db.execute( "update FullTimeInstructor set salary = ? where id = ?", (salary,id))
             db.commit()
-            return "fulltime edit successful"
+            return redirect(url_for('get_employees'))
         elif request.form['type'] == 'External':
             name = request.form['name']
             hoursTaught = request.form['hours']
@@ -210,7 +210,7 @@ def edit_employee(id):
             cur =  db.execute( "update Instructor set name = ? where id = ?", (name,id))
             cur =  db.execute( "update ExternalInstructor set hoursTaught = ?, hourlywage = ? where id = ?", (hoursTaught,hourlyWage,id))
             db.commit()
-            return "external edit successful"
+            return redirect(url_for('get_employees'))
         else:
             return 'Invalid employee edit'
 
