@@ -68,7 +68,7 @@ def get_classes():
     print(form.classId)
     print(request.data)
     if request.method == "GET":
-        cur =  db.execute( "select e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name, r.capacity as roomCap, r.roomID from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID ")
+        cur =  db.execute("select distinct i.name as instructorName, c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID")
         curexcercises = db.execute("select * from Exercise")
         # classes = cur.fetchall()
         classes = cur.fetchall()
@@ -102,13 +102,14 @@ def sign_up():
     getEnrolledCur = db.execute("select count(*) from Enrolled as numberEnrolled where classId = ?", (classId,))
     getEnrolled = getEnrolledCur.fetchone()
     enrolled = getEnrolled[0]
-    capacityCur = db.execute("select r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID where classId =?",(classId,))
+    capacityCur = db.execute("select r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID where classId =?",(classId,))
     getCapacity = capacityCur.fetchone()
+
     capacity = getCapacity[0]
     #capacity = capacity[0]
     print(capacity)
     cur = db.execute(
-        "select  e.name as exerciseName,e.description,i.name as instructorName,r.roomID as roomId, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join room r on r.roomID = c.roomID where classId =?",(classId,))
+        "select e.name as exerciseName,e.description,i.name as instructorName,r.roomID as roomId, c.classId as classId, c.buildingName, c.startTime, c.instructorID as instructorId,i.name from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join room r on r.roomID = c.roomID where classId =?",(classId,))
     classes = cur.fetchall()
 
     # print("the capacity of this room is ",roomCap)
@@ -276,7 +277,7 @@ def add_exercises():
     name = form.exerciseName.data
     description = form.exerciseDescription.data
     db = get_db()
-    curAddExercise = db.execute("insert into exercise (name, description) VALUES (?,?)",(name,description))
+    curAddExercise = db.execute("insert into exercise (id,name, description) VALUES (?,?,?)",(None,name,description))
 
     curAddExercise.fetchall()
     #curdeleteNone = db.execute("Delete from exercise where name =?",None)
@@ -315,7 +316,7 @@ def delete_exercise():
 def class_view():
     db = get_db()
     form = classViewForm()
-    curClasses = db.execute("select c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID ")
+    curClasses = db.execute("select distinct i.name as instructorName, c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID ")
 # classes = cur.fetchall()
     classes = curClasses.fetchall()
     pprint("hELFLODOSFOSDOFSOFOSD")
