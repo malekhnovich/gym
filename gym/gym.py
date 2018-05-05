@@ -316,11 +316,17 @@ def delete_exercise():
 def class_view():
     db = get_db()
     form = classViewForm()
-    curClasses = db.execute("select distinct i.name as instructorName, c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID ")
+    curClasses = db.execute("select i.name as instructorName, c.classId,c.instructorID,c.startTime,c.duration,e.id,r.buildingName,r.roomID, e.name as exerciseName,e.description, c.classId as classId, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID ")
+    curExercises=db.execute("Select e.name as exerciseName,e.description as exerciseDescription,e.id from exercise e")
+    curEmployees = db.execute("Select i.id,i.name as instructorName  from Instructor i")
+    instructors = curEmployees.fetchall()
+    exercises = curExercises.fetchall()
+
+
 # classes = cur.fetchall()
     classes = curClasses.fetchall()
     pprint("hELFLODOSFOSDOFSOFOSD")
-    return render_template("class_view.html",classes=classes,form=form)
+    return render_template("class_view.html",classes=classes,instructors=instructors,exercises = exercises,form=form)
 
 
 @app.route("/add_class", methods = ['POST','GET'])

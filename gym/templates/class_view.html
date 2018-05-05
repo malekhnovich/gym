@@ -15,16 +15,16 @@
   <tr>
     <h6>Instructor Name</h5>
       <select name = "instructorName">
-        {% for class in classes %}
-        <option name = "instructorName" value="{{class.instructorName}}"SELECTED>{{class.instructorName}}</option>
+        {% for instructor in instructors %}
+        <option name = "instructorName" value="{{instructor.instructorName}}"SELECTED>{{instructor.instructorName}}</option>
         {%endfor%}
       </select>
     <h6>Start Time</h5>
     <input type = "text" name = "startTime">
     <h6>Exercise Name </h6>
     <select name = "exerciseName">
-    {% for class in classes %}
-    <option name = "exerciseName" value="{{class.exerciseName}}"SELECTED>{{class.exerciseName}}</option>
+    {% for exercise in exercises %}
+    <option name = "exerciseName" value="{{exercise.exerciseName}}"SELECTED>{{exercise.exerciseName}}</option>
     {%endfor%}
   </select>
   <h6>Class Duration</h6>
@@ -34,8 +34,8 @@
     <input type = "text" name = "exerciseName"> -->
     <h6> Exercise Description</h5>
       <select name = "exerciseDescription">
-      {% for class in classes %}
-      <option name = "exerciseDescription" value="{{class.description}}"SELECTED>{{class.description}}</option>
+      {% for exercise in exercises %}
+      <option name = "exerciseDescription" value="{{exercise.exerciseDescription}}"SELECTED>{{exercise.exerciseDescription}}</option>
       {%endfor%}
     </select>
     <h6>Building Name</h5>
