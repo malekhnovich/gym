@@ -294,7 +294,7 @@ def delete_exercise():
         return render_template("delete_exercise.html", title="delete exercise", form=form, exercises=exercises)
 
     id = request.form["id"]
-    id = int(str(id)[:1])
+    exerciseId = int(str(id)[:1])
     print("The id value is ",id)
     # curId = db.execute("Select ft.name from FullTimeInstructor ft where id = ?",(id,))
 
@@ -304,9 +304,9 @@ def delete_exercise():
     print("classes to delete",classesToDelete)
     for i in classesToDelete:
         print("here")
-        deleteClass = db.execute("Delete from Class where exerciseID = ?",(id,))
+        deleteClass = db.execute("Delete from Class where exerciseID = ?",(exerciseId,))
         deleteEnrolled = db.execute("Delete from Enrolled where classId = ?",(i,))
-    deleteNone = db.execute("Delete from exercise where name=?",(None,))
+    deleteExercise = db.execute("Delete from exercise where id = ?",(exerciseId,))
     db.commit()
     return redirect(url_for('view_exercises'))
 
