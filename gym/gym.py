@@ -67,8 +67,8 @@ def get_classes():
     c = db.cursor()
     print(form.classId)
     print(request.data)
-    if request.method == "GET":
-        cur =  db.execute("select distinct i.name as instructorName, c.classId,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID")
+    if request.method == "GET" or request.method=="POST":
+        cur =  db.execute("select  i.name as instructorName,c.instructorID,c.startTime,c.duration,c.exerciseID,r.buildingName,r.roomID, e.name as exerciseName,e.description, c.classId as classId, c.buildingName, c.startTime,i.name, r.capacity as roomCap from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.exerciseID=e.id join Room r on r.roomID = c.roomID")
         curexcercises = db.execute("select * from Exercise")
         # classes = cur.fetchall()
         classes = cur.fetchall()
