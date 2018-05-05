@@ -13,26 +13,37 @@
 <form method = "POST" action = "./add_class">
 <table>
   <tr>
-    <h6>Instructor Id</h5>
-    <input type = "text" name = "instructorID">
+    <h6>Instructor Name</h5>
+      <select name = "instructorName">
+        {% for class in classes %}
+        <option name = "instructorName" value="{{class.instructorName}}"SELECTED>{{class.instructorName}}</option>
+        {%endfor%}
+      </select>
     <h6>Start Time</h5>
     <input type = "text" name = "startTime">
-    <h6>Exercise Id </h6>
-    <input type ="text" name= "exerciseId">
-    <h6>Duration</h5>
-    <input type = "text" name = "newClassDuration">
-
+    <h6>Exercise Name </h6>
+    <select name = "exerciseName">
+    {% for class in classes %}
+    <option name = "exerciseName" value="{{class.exerciseName}}"SELECTED>{{class.exerciseName}}</option>
+    {%endfor%}
+  </select>
+  <h6>Class Duration</h6>
+    <input type = "text" name="newClassDuration">
+      </select>
     <!-- <h6> Excercise Name</h5>
     <input type = "text" name = "exerciseName"> -->
     <h6> Exercise Description</h5>
-      <input type="text" name="ExerciseDescription">
+      <select name = "exerciseDescription">
+      {% for class in classes %}
+      <option name = "exerciseDescription" value="{{class.description}}"SELECTED>{{class.description}}</option>
+      {%endfor%}
+    </select>
     <h6>Building Name</h5>
-    <input type = "text" name = "newBuildingName">
+      <input type = "text" name="newBuildingName">
     <h6>Room Number </h5>
-    <input type = "text" name = "newRoomNumber">
+      <input type ="text" name = "newRoomNumber">
     <h6>Capacity </h5>
-      <input type="text" name = "newCapacity">
-
+      <input type = "text"name=  "newCapacity">
     <input type = "submit" value = "Add Class">
   </form>
   <div class="page">

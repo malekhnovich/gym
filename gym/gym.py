@@ -69,8 +69,10 @@ def get_classes():
     print(request.data)
     if request.method == "GET":
         cur =  db.execute( "select e.name as exerciseName,e.description,i.name as instructorName, c.classId as classId, c.buildingName, c.startTime, i.id as instructorId,i.name, r.capacity as roomCap, r.roomID from Instructor i join Class c on i.id = c.instructorID join  Exercise e on c.classId=e.id join Room r on r.roomID = c.roomID ")
+        curexcercises = db.execute("select * from Exercise")
         # classes = cur.fetchall()
         classes = cur.fetchall()
+        excercises = curexcercises.fetchall()
         return render_template("/sign_up.html", title = "sign up", form=form, classes=classes)
 
 
@@ -323,8 +325,8 @@ def class_view():
 @app.route("/add_class", methods = ['POST','GET'])
 def add_class():
     db = get_db()
-    print("hereeeedaedadede")
-    pprint(request.form)
+    #pprint(request.form)
+
     lastInstructor = db.execute("select count(*) from Instructor as numberInstructor")
     lastInstructor = lastInstructor.fetchone()
     InstructorRow = lastInstructor[0]
@@ -333,13 +335,18 @@ def add_class():
     exerciseRow = lastExercise.fetchone()
     nextExcerciseId = exerciseRow[0]
     nextExcerciseId = nextExcerciseId+1
-    exerciseId = request.form.get("exerciseId")
-    #instructorName = request.form.get("instructorName")
-    instructorID = request.form.get("instructorID")
+    exerciseName = request.form.get("exerciseName")
+    exerciseId = db.execute("Select id from exercise where name =?",(exerciseName,))
+    exerciseId= exerciseId.fetchone()
+    exerciseId = exerciseId[0]
+    instructorName = request.form.get("instructorName")
+    print(instructorName)
+    curInstructor = db.execute("Select id from instructor where name =?",(instructorName,))
+    instructorID = curInstructor.fetchone()
+    instructorID = instructorID[0]
     print("The instructor id is ",instructorID)
     startTime = request.form.get("startTime")
     duration=request.form.get("duration")
-    exerciseName = request.form.get("exerciseName")
     exerciseDescription = request.form.get("exerciseDescription")
     newBuildingName  = request.form.get("newBuildingName")
     newRoomNumber  = request.form.get("newRoomNumber")
@@ -350,9 +357,9 @@ def add_class():
 
     cur = db.execute("insert into Class (classId,instructorID,startTime,duration, exerciseID, buildingName,roomID) Values(?,?,?,?,?,?,?)",(None,instructorID,startTime,newClassDuration,exerciseId,newBuildingName,newRoomNumber))
     cur2 =db.execute("insert into Room(buildingName,roomID, capacity) Values(?,?,?)",(newBuildingName,newRoomNumber, newCapacity))
-
+    #TODO:make add take in exercise rather than id
     db.commit()
-    return redirect('/class_view')
+    return redirect (url_for('class_view'))
 
 @app.route("/edit_class",methods = ['POST','GET'])
 def editClass():
