@@ -481,7 +481,19 @@ def view_payroll():
     # print("yearly salary %(yearlyFullTime)d"%{yearlyFullTime})
     return render_template("view_payroll.html",extEmpMonthlyTax = eemTax,fullEmpMonthlyTax=femTax)
 
+@app.route('/statistics')
+def view_stats():
+    db = get_db()
+    popularClassesCur = db.execute("select e.name as exerciseName, (select count(*) from Enrolled where classId = c.classId ) as enrolled from Class c, Exercise e, Instructor i, Room r where c.exerciseID = e.id and c.instructorID = i.id and c.buildingName = r.buildingName and c.roomID = r.roomID and r.capacity > enrolled order by enrolled desc limit 3")
+    popularClasses = popularClassesCur.fetchall()
 
+    avgSalaryCur = db.execute("select avg(salary) from FullTimeInstructor")
+    avgSalary = avgSalaryCur.fetchone()
+
+    avgWageCur = db.execute("select avg(hourlywage) from ExternalInstructor")
+    avgWage = avgWageCur.fetchone()
+
+    return render_template("stats.html", popularClasses=popularClasses, avgSalary=avgSalary, avgWage=avgWage)
 
 
     # @app.route('/exercise_signup',methods= ['POST'])
