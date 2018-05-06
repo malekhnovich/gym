@@ -484,7 +484,7 @@ def view_payroll():
 @app.route('/statistics')
 def view_stats():
     db = get_db()
-    popularClassesCur = db.execute("select e.name as exerciseName, (select count(*) from Enrolled where classId = c.classId ) as enrolled from Class c, Exercise e, Instructor i, Room r where c.exerciseID = e.id and c.instructorID = i.id and c.buildingName = r.buildingName and c.roomID = r.roomID and r.capacity > enrolled order by enrolled desc limit 3")
+    popularClassesCur = db.execute("select e.name as exerciseName, (select count(*) from Enrolled where classId = c.classId ) as enrolled from Class c, Exercise e, Instructor i, Room r where c.exerciseID = e.id and c.instructorID = i.id and c.buildingName = r.buildingName and c.roomID = r.roomID and r.capacity >= enrolled order by enrolled desc limit 3")
     popularClasses = popularClassesCur.fetchall()
 
     avgSalaryCur = db.execute("select avg(salary) from FullTimeInstructor")
